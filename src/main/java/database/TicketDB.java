@@ -1,14 +1,14 @@
 package database;
 
 import ticket.Ticket;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TicketDB extends Database{
-    private final ArrayList<Ticket> db;
+    private final HashMap<String, Ticket> db;
     private static TicketDB uniqueDB;
 
     private TicketDB(){
-        this.db = new ArrayList<>();
+        this.db = new HashMap<>();
     }
 
     public static TicketDB getInstance() {
@@ -16,5 +16,13 @@ public class TicketDB extends Database{
             uniqueDB = new TicketDB();
         }
         return uniqueDB;
+    }
+
+    public void addTicket(String name, Ticket ticket){
+        this.db.put(name, ticket);
+    }
+
+    public Ticket getTicket(String name){
+        return db.get(name);
     }
 }
