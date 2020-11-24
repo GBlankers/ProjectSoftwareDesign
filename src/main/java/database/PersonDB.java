@@ -27,7 +27,11 @@ public class PersonDB extends Database {
     }
 
     public void addPerson(Person person){
-        db.put(person, new ArrayList<>());
+        if(!db.containsKey(person)) {
+            db.put(person, new ArrayList<>());
+            setChanged();
+            notifyObservers(person);
+        }
     }
 
     public void addTicket(Person person, String ticket){

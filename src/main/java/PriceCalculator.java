@@ -24,6 +24,10 @@ public class PriceCalculator {
         HashMap<Person, ArrayList<String>> everyone = this.personDB.getHashMap();
 
         int totalPeople = 0;
+        int totalTickets = 0;
+        int num = 0;
+
+        System.out.print("Calculating prices [ / ]\r");
 
         // Initialize Array with all Names and 0's
         for(Person x: everyone.keySet()) {
@@ -34,14 +38,16 @@ public class PriceCalculator {
         // Get a list with all the names of the tickets
         for(ArrayList<String> e: everyone.values()){
             allTickets.addAll(e);
+            totalTickets +=1;
         }
 
         // Go over all tickets
         for(String e: allTickets){
+            System.out.print("Calculating prices [" + num + "/" + totalTickets +"]\r");
             Ticket temp = ticketDB.getTicket(e);
+            num += 1;
 
             if (temp instanceof unevenTicket){
-                System.out.println("Ticket " + e + " is uneven ticket: calculating prices");
                 // get per person the price of the ticket
                 HashMap<Person, Double> pricePerPerson = ((RestaurantTicket) temp).getPricePerPerson();
                 // Go over all persons who must pay
@@ -51,7 +57,6 @@ public class PriceCalculator {
                 }
 
             } else if (temp instanceof evenTicket){
-                System.out.println("Ticket " + e + " is even ticket: calculating prices");
                 // total price of the ticket
                double price = ((PlaneTicket) temp).getTotalPrice();
                // Add the totalPrice/#persons to every person
@@ -59,8 +64,11 @@ public class PriceCalculator {
                    pricesToPay.replace(x, pricesToPay.get(x) + price/totalPeople);
                }
             }
-
         }
+
+        num = totalTickets;
+        System.out.println("Calculating prices [" + num + "/" + totalTickets +"]\r");
+
         return pricesToPay;
     }
 
