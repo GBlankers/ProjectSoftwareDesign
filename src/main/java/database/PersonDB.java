@@ -2,13 +2,17 @@ package database;
 
 import person.Person;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PersonDB extends Database {
-    private final ArrayList<Person> db;
+    // Collect all persons and the names of the bills they payed
+    private final HashMap<Person, ArrayList<String>> db;
+
+    // Singleton pattern
     private static PersonDB uniqueDB;
 
     private PersonDB() {
-        this.db = new ArrayList<>();
+        this.db = new HashMap<>();
     }
 
     public static PersonDB getInstance() {
@@ -18,13 +22,22 @@ public class PersonDB extends Database {
         return uniqueDB;
     }
 
-    public boolean isInDataBase(Person person){
-        return db.contains(person);
+    public HashMap<Person, ArrayList<String>> getHashMap(){
+        return db;
     }
 
-    public void addEntry(Person person){
-        if(!db.contains(person)){
-            db.add(person);
-        }
+    public void addPerson(Person person){
+        db.put(person, new ArrayList<>());
+    }
+
+    public void addTicket(Person person, String ticket){
+        ArrayList<String> temp;
+        temp = db.get(person);
+        temp.add(ticket);
+        db.replace(person, temp);
+    }
+
+    public boolean personInDb(Person person){
+        return db.getOrDefault(person, null) != null;
     }
 }

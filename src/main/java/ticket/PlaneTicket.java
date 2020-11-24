@@ -2,11 +2,10 @@ package ticket;
 
 import person.Person;
 
-public class PlaneTicket extends Ticket{
-    private double totalPrice;
+public class PlaneTicket extends evenTicket{
 
     public PlaneTicket(Person person, double totalPrice){
-        super(person);
-        this.totalPrice = totalPrice;
+        super(person, totalPrice);
     }
+
 }

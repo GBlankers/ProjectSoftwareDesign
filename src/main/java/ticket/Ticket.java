@@ -2,7 +2,7 @@ package ticket;
 
 import person.Person;
 
-public abstract class Ticket {
+public class Ticket {
     private String payer;
 
     public Ticket(Person person){
