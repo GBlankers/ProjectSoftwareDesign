@@ -8,8 +8,11 @@ import java.util.HashMap;
 
 public class PriceCalculator {
     // https://stackoverflow.com/questions/934775/changing-value-after-its-placed-in-hashmap-changes-whats-inside-hashmap
-    private PersonDB personDB;
-    private TicketDB ticketDB;
+    // hashmap a = hashmap b => a will change when b is changed
+    // => b.clone() or new HashMap<>(b)
+
+    private final PersonDB personDB;
+    private final TicketDB ticketDB;
     // Name of person + dept to person in hashmap per person
     private HashMap<Person, HashMap<Person, Double>> pricesToPay;
 
@@ -65,9 +68,11 @@ public class PriceCalculator {
                 HashMap<Person, Double> oldPrices = new HashMap<>(pricesToPay.get(payer));
                 // for every person update the debts they have
                 for(Person x: everyone.keySet()){
-                    double old = oldPrices.getOrDefault(x, 0.0);
-                    double newPrice = pricePerPerson.getOrDefault(x, 0.0);
-                    temp.put(x, old + newPrice);
+                    if(x != payer) {
+                        double old = oldPrices.getOrDefault(x, 0.0);
+                        double newPrice = pricePerPerson.getOrDefault(x, 0.0);
+                        temp.put(x, old + newPrice);
+                    }
                 }
                 pricesToPay.replace(payer, temp);
 
@@ -81,9 +86,6 @@ public class PriceCalculator {
                     if(x != payer)
                         temp.put(x, pricesToPay.get(payer).getOrDefault(x, 0.0) + ppp);
                }
-                System.out.println("\n");
-                printHashMap(temp);
-                System.out.println("\n");
                 pricesToPay.replace(payer, temp);
             }
         }
@@ -99,8 +101,10 @@ public class PriceCalculator {
         HashMap<Person , Double> temp;
         for(Person x: priceMap.keySet()){
             temp = priceMap.getOrDefault(x, null);
-            System.out.println(x);
-            printHashMap(temp);
+            if(!temp.isEmpty()){
+                System.out.println(x);
+                printHashMap(temp);
+            }
         }
     }
 

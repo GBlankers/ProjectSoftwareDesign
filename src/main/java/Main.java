@@ -36,10 +36,10 @@ public class Main {
         ticketFactory factT = new ticketFactory();
 
         HashMap<Person, Double> restBill = new HashMap<>();
-        restBill.put(person1, 30.0);
+        restBill.put(person2, 30.0);
         restBill.put(person3, 50.0);
         restBill.put(person4, 70.0);
-        factT.addTicket("restaurant", "rest1", person2, restBill);
+        factT.addTicket("restaurant", "rest1", person1, restBill);
         factT.addTicket("plane", "planeTicket1", person1, 400.0);
 
         priceCalculator.calculatePrices();
