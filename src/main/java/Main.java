@@ -1,8 +1,5 @@
-import database.PersonDB;
-import database.TicketDB;
 import factory.personFactory;
 import factory.ticketFactory;
-import gui.Gui;
 import person.Person;
 
 import java.util.HashMap;
@@ -23,8 +20,6 @@ public class Main {
 
     public void run(){
         personFactory factP = new personFactory();
-
-//        Gui gui = new Gui();
 
         Person person1 = factP.addPerson("P1");
         Person person2 = factP.addPerson("P2");
