@@ -3,13 +3,13 @@ package ticket;
 import person.Person;
 
 public class Ticket {
-    private String payer;
+    private Person payer;
 
-    public Ticket(Person person){
-        this.payer = person.getName();
+    public Ticket(Person payer){
+        this.payer = payer;
     }
 
-    public String getPayer() {
+    public Person getPayer() {
         return payer;
     }
 }

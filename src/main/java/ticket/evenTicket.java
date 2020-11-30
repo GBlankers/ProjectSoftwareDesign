@@ -5,8 +5,8 @@ import person.Person;
 public class evenTicket extends Ticket{
     private double totalPrice;
 
-    public evenTicket(Person person, double totalPrice) {
-        super(person);
+    public evenTicket(Person payer, double totalPrice) {
+        super(payer);
         this.totalPrice = totalPrice;
     }
 

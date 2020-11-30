@@ -4,6 +4,7 @@ import ticket.Ticket;
 import java.util.HashMap;
 
 public class TicketDB extends Database{
+    // name of the ticket + Ticket (contains price and payer)
     private final HashMap<String, Ticket> db;
     private static TicketDB uniqueDB;
 

@@ -6,8 +6,8 @@ import java.util.HashMap;
 public class unevenTicket extends Ticket{
     private HashMap<Person, Double> pricePerPerson;
 
-    public unevenTicket(Person person, HashMap<Person, Double> pricePerPerson) {
-        super(person);
+    public unevenTicket(Person payer, HashMap<Person, Double> pricePerPerson) {
+        super(payer);
         this.pricePerPerson = pricePerPerson;
     }
 
