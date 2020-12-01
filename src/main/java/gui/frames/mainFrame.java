@@ -73,6 +73,19 @@ public class mainFrame extends JFrame implements Observer {
             }
         });
 
+        buttonTicket.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchToAddTicket();
+            }
+        });
+
+    }
+
+    public void switchToAddTicket(){
+        addTicketFrame ticketFrame = new addTicketFrame("Add ticket", this);
+        this.setVisible(false);
+        ticketFrame.setVisible(true);
     }
 
     public void switchToAddPerson(){

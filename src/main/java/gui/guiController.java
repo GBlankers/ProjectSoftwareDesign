@@ -10,8 +10,6 @@ public class guiController{
     //Main frame
     private JFrame mainFrame;
     //TODO Add ticket frame
-    //TODO Add Person frame
-
 
     public guiController(){
         mainFrame = new mainFrame("Money Tracker", PersonDB.getInstance());
