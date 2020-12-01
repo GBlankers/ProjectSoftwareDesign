@@ -10,8 +10,6 @@ import java.util.Observer;
 
 public class mainFrame extends JFrame implements Observer {
 
-//    private personPanel personPanel;
-//    private buttonPanel buttonPanel;
     private JPanel container;
 
     private JButton button1;
@@ -19,7 +17,11 @@ public class mainFrame extends JFrame implements Observer {
 
     private JList<Person> personList;
     private DefaultListModel<Person> personModel;
-    private JLabel label;
+    private JLabel personLabel;
+
+    private JList<String> ticketList;
+    private DefaultListModel<String> ticketModel;
+    private JLabel ticketLabel;
 
     private Observable observable;
 
@@ -30,6 +32,9 @@ public class mainFrame extends JFrame implements Observer {
 
         personModel = new DefaultListModel<>();
         personList = new JList<>(personModel);
+
+        ticketModel = new DefaultListModel<>();
+        ticketList = new JList<>(ticketModel);
 
         initialize();
     }
@@ -48,12 +53,15 @@ public class mainFrame extends JFrame implements Observer {
         button1 = new JButton("Add Person");
         button2 = new JButton("Add Ticket");
 
-        label = new JLabel("All Persons");
+        personLabel = new JLabel("All Persons");
+        ticketLabel = new JLabel("All Tickets");
 
         this.addObjects(button1, container, layout, gbc, 2, 3, 1, 1);
         this.addObjects(button2, container, layout, gbc, 3, 3, 1, 1);
-        this.addObjects(label, container, layout, gbc, 0, 0, 1, 1);
+        this.addObjects(personLabel, container, layout, gbc, 0, 0, 1, 1);
         this.addObjects(personList, container, layout, gbc, 0, 1, 1, 1);
+        this.addObjects(ticketLabel, container, layout, gbc, 1, 0, 1, 1);
+        this.addObjects(ticketList, container, layout, gbc, 1, 1, 1, 1);
     }
 
     public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
@@ -72,8 +80,14 @@ public class mainFrame extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof PersonDB){
-            Person p = (Person) arg;
-            personModel.addElement(p);
+            if(arg instanceof Person){
+                Person p = (Person) arg;
+                personModel.addElement(p);
+            } else if(arg instanceof String){
+                String s = (String) arg;
+                ticketModel.addElement(s);
+            }
+
         }
     }
 }

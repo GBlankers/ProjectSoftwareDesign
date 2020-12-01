@@ -38,6 +38,8 @@ public class PersonDB extends Database {
         ArrayList<String> temp;
         temp = db.get(person);
         temp.add(ticket);
+        setChanged();
+        notifyObservers(ticket);
         db.replace(person, temp);
     }
 
