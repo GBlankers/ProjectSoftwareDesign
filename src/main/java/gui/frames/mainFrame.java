@@ -5,6 +5,8 @@ import person.Person;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,8 +14,8 @@ public class mainFrame extends JFrame implements Observer {
 
     private JPanel container;
 
-    private JButton button1;
-    private JButton button2;
+    private JButton buttonPerson;
+    private JButton buttonTicket;
 
     private JList<Person> personList;
     private DefaultListModel<Person> personModel;
@@ -50,22 +52,37 @@ public class mainFrame extends JFrame implements Observer {
         container.setLayout(layout);
         getContentPane().add(container);
 
-        button1 = new JButton("Add Person");
-        button2 = new JButton("Add Ticket");
+        buttonPerson = new JButton("Add Person");
+        buttonTicket = new JButton("Add Ticket");
 
         personLabel = new JLabel("All Persons");
         ticketLabel = new JLabel("All Tickets");
 
-        this.addObjects(button1, container, layout, gbc, 2, 3, 1, 1);
-        this.addObjects(button2, container, layout, gbc, 3, 3, 1, 1);
+        this.addObjects(buttonPerson, container, layout, gbc, 2, 3, 1, 1);
+        this.addObjects(buttonTicket, container, layout, gbc, 3, 3, 1, 1);
         this.addObjects(personLabel, container, layout, gbc, 0, 0, 1, 1);
         this.addObjects(personList, container, layout, gbc, 0, 1, 1, 1);
         this.addObjects(ticketLabel, container, layout, gbc, 1, 0, 1, 1);
         this.addObjects(ticketList, container, layout, gbc, 1, 1, 1, 1);
+
+        //https://stackoverflow.com/questions/21879243/how-to-create-on-click-event-for-buttons-in-swing
+        buttonPerson.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchToAddPerson();
+            }
+        });
+
+    }
+
+    public void switchToAddPerson(){
+        addPersonFrame personFrame = new addPersonFrame("Add person", this);
+        this.setVisible(false);
+        personFrame.setVisible(true);
     }
 
     public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
-
+        // https://stackoverflow.com/questions/30656473/how-to-use-gridbaglayout
         gbc.gridx = gridx;
         gbc.gridy = gridy;
 
