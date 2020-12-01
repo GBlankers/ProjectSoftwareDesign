@@ -1,5 +1,6 @@
 import factory.personFactory;
 import factory.ticketFactory;
+import gui.guiController;
 import person.Person;
 
 import java.util.HashMap;
@@ -20,6 +21,8 @@ public class Main {
 
     public void run(){
         personFactory factP = new personFactory();
+
+        guiController guiController = new guiController();
 
         Person person1 = factP.addPerson("P1");
         Person person2 = factP.addPerson("P2");
