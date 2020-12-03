@@ -13,6 +13,7 @@ public class addPersonFrame extends JFrame{
 
     private JButton okButton;
     private JTextField nameInput;
+    private JLabel nameLabel;
 
     private mainFrame parent;
 
@@ -33,18 +34,20 @@ public class addPersonFrame extends JFrame{
         container.setLayout(layout);
         getContentPane().add(container);
 
+        nameLabel = new JLabel("Name:");
         okButton = new JButton("Add");
         nameInput = new JTextField(40);
 
-        this.addObjects(nameInput, container, layout, gbc, 0, 0, 1, 1);
-        this.addObjects(okButton, container, layout, gbc, 0, 1, 1, 1);
+        this.addObjects(nameLabel, container, layout, gbc, 0, 0, 1, 1);
+        this.addObjects(nameInput, container, layout, gbc, 0, 1, 1, 1);
+        this.addObjects(okButton, container, layout, gbc, 0, 2, 1, 1);
 
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchToMainFrame();
-            }
-        });
+        nameInput.addActionListener(e -> switchToMainFrame());
+
+        okButton.addActionListener(e -> switchToMainFrame());
+
+        // Center the window on screen
+        this.setLocationRelativeTo(null);
     }
 
     private void switchToMainFrame(){

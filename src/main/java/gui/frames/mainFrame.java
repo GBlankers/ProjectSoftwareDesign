@@ -16,13 +16,16 @@ public class mainFrame extends JFrame implements Observer {
 
     private JButton buttonPerson;
     private JButton buttonTicket;
+    private JButton deletePerson;
 
     private JList<Person> personList;
     private DefaultListModel<Person> personModel;
+    private JScrollPane personScroll;
     private JLabel personLabel;
 
     private JList<String> ticketList;
     private DefaultListModel<String> ticketModel;
+    private JScrollPane ticketScroll;
     private JLabel ticketLabel;
 
     private Observable observable;
@@ -42,7 +45,7 @@ public class mainFrame extends JFrame implements Observer {
     }
 
     public void initialize(){
-        this.setSize(400, 400);
+        this.setSize(600, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         container = new JPanel();
@@ -54,53 +57,73 @@ public class mainFrame extends JFrame implements Observer {
 
         buttonPerson = new JButton("Add Person");
         buttonTicket = new JButton("Add Ticket");
+        deletePerson = new JButton("Delete Person");
 
         personLabel = new JLabel("All Persons");
         ticketLabel = new JLabel("All Tickets");
 
-        this.addObjects(buttonPerson, container, layout, gbc, 2, 3, 1, 1);
-        this.addObjects(buttonTicket, container, layout, gbc, 3, 3, 1, 1);
-        this.addObjects(personLabel, container, layout, gbc, 0, 0, 1, 1);
-        this.addObjects(personList, container, layout, gbc, 0, 1, 1, 1);
-        this.addObjects(ticketLabel, container, layout, gbc, 1, 0, 1, 1);
-        this.addObjects(ticketList, container, layout, gbc, 1, 1, 1, 1);
+        // https://stackoverflow.com/questions/3200846/how-to-make-a-scrollable-jlist-to-add-details-got-from-a-joptionpane
+        personScroll = new JScrollPane(personList);
+        ticketScroll = new JScrollPane(ticketList);
+
+
+        this.addObjects(personLabel, container, layout, gbc, 0, 0, 1, 1, GridBagConstraints.CENTER);
+        this.addObjects(ticketLabel, container, layout, gbc, 1, 0, 1, 1, GridBagConstraints.CENTER);
+
+        this.addObjects(personScroll, container, layout, gbc, 0, 1, 1, 3, GridBagConstraints.BOTH);
+        this.addObjects(ticketScroll, container, layout, gbc, 1, 1, 1, 3, GridBagConstraints.BOTH);
+
+        gbc.anchor = GridBagConstraints.SOUTH; // Buttons will stick to bottom of window
+        this.addObjects(buttonPerson, container, layout, gbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
+        this.addObjects(buttonTicket, container, layout, gbc, 3, 4, 1, 1, GridBagConstraints.HORIZONTAL);
+        this.addObjects(deletePerson, container, layout, gbc, 0, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 
         //https://stackoverflow.com/questions/21879243/how-to-create-on-click-event-for-buttons-in-swing
-        buttonPerson.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchToAddPerson();
-            }
-        });
+        //https://www.w3schools.com/java/java_lambda.asp#:~:text=Lambda%20Expressions%20were%20added%20in,the%20body%20of%20a%20method.
+        buttonPerson.addActionListener(e -> switchToAddPerson());
 
-        buttonTicket.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchToAddTicket();
-            }
-        });
+        buttonTicket.addActionListener(e -> switchToAddTicket());
 
+        deletePerson.addActionListener(e -> deletePerson());
+
+        this.setLocationRelativeTo(null);
     }
 
-    public void switchToAddTicket(){
+    private void deletePerson() {
+        if(personList.getSelectedValue() == null){
+            System.out.println("Nothing selected");
+        } else {
+            PersonDB.getInstance().removePerson(personList.getSelectedValue());
+            personModel.removeElement(personList.getSelectedValue());
+        }
+    }
+
+    private void switchToAddTicket(){
         addTicketFrame ticketFrame = new addTicketFrame("Add ticket", this);
         this.setVisible(false);
         ticketFrame.setVisible(true);
     }
 
-    public void switchToAddPerson(){
+    private void switchToAddPerson(){
         addPersonFrame personFrame = new addPersonFrame("Add person", this);
         this.setVisible(false);
         personFrame.setVisible(true);
     }
 
-    public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
+    public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc,
+                           int gridx, int gridy, int gridwidth, int gridheight, int fill){
         // https://stackoverflow.com/questions/30656473/how-to-use-gridbaglayout
+        // https://stackoverflow.com/questions/24723998/can-components-of-a-gridbaglayout-fill-parent-frame-upon-resize
         gbc.gridx = gridx;
         gbc.gridy = gridy;
 
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+
         gbc.gridwidth = gridwidth;
         gbc.gridheight = gridheight;
+
+        gbc.fill = fill;
 
         layout.setConstraints(component, gbc);
         container.add(component);

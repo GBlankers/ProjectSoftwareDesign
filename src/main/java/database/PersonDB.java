@@ -34,6 +34,10 @@ public class PersonDB extends Database {
         }
     }
 
+    public void removePerson(Person person){
+        db.remove(person);
+    }
+
     public void addTicket(Person person, String ticket){
         ArrayList<String> temp;
         temp = db.get(person);
