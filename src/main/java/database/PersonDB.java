@@ -4,15 +4,13 @@ import person.Person;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PersonDB extends Database {
-    // Collect all persons and the names of the bills they payed
-    private final HashMap<Person, ArrayList<String>> db;
+public class PersonDB extends Database<Person, ArrayList<String>> {
 
     // Singleton pattern
     private static PersonDB uniqueDB;
 
     private PersonDB() {
-        this.db = new HashMap<>();
+        super();
     }
 
     public static PersonDB getInstance() {
@@ -22,11 +20,7 @@ public class PersonDB extends Database {
         return uniqueDB;
     }
 
-    public HashMap<Person, ArrayList<String>> getHashMap(){
-        return db;
-    }
-
-    public void addPerson(Person person){
+    public void addPerson(Person person, ArrayList<String> tickets){
         if(!db.containsKey(person)) {
             db.put(person, new ArrayList<>());
             setChanged();
@@ -42,6 +36,10 @@ public class PersonDB extends Database {
         db.remove(person);
     }
 
+    public HashMap<Person, ArrayList<String>> getHashMap(){
+        return db;
+    }
+
     public void addTicket(Person person, String ticket){
         ArrayList<String> temp;
         temp = db.get(person);
@@ -55,9 +53,5 @@ public class PersonDB extends Database {
         ArrayList<String> temp = new ArrayList<>(db.get(payer));
         temp.remove(ticketName);
         db.replace(payer, temp);
-    }
-
-    public boolean personInDb(Person person){
-        return db.getOrDefault(person, null) != null;
     }
 }

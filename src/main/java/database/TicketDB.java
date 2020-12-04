@@ -4,13 +4,13 @@ import person.Person;
 import ticket.Ticket;
 import java.util.HashMap;
 
-public class TicketDB extends Database{
-    // name of the ticket + Ticket (contains price and payer)
-    private final HashMap<String, Ticket> db;
+public class TicketDB extends Database<String, Ticket>{
+
+    //Singleton pattern
     private static TicketDB uniqueDB;
 
     private TicketDB(){
-        this.db = new HashMap<>();
+        super();
     }
 
     public static TicketDB getInstance() {
@@ -33,10 +33,6 @@ public class TicketDB extends Database{
     public void removeTicket(String ticketName){
         Person payer = db.get(ticketName).getPayer();
         PersonDB.getInstance().removeTicket(payer, ticketName);
-    }
-
-    public boolean ticketInDb(String name){
-        return db.containsKey(name);
     }
 
     public Ticket getTicket(String name){

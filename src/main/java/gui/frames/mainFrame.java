@@ -104,6 +104,7 @@ public class mainFrame extends JFrame implements Observer {
     private void refresh(){
         System.out.println();
         priceCalculator.calculatePrices();
+        priceCalculator.printMapping();
     }
 
     private void deletePerson() {
