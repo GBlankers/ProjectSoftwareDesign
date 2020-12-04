@@ -46,7 +46,7 @@ public class Main {
 
 //        sleep(5000);
 //
-//        Person person5 = factP.addPerson("P5");
+//        Person person5 = factP.addToDb("P5");
 //
 //        System.out.println("\nNEW PERSON \n");
 //        priceCalculator.calculatePrices();

@@ -20,10 +20,6 @@ public class TicketDB extends Database<String, Ticket>{
         return uniqueDB;
     }
 
-    public void addTicket(String name, Ticket ticket){
-        this.db.put(name, ticket);
-    }
-
     //When remove ticket is called after a remove person
     public void removeTicketOnly(String ticketName){
         db.remove(ticketName);

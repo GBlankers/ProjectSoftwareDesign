@@ -20,14 +20,6 @@ public class PersonDB extends Database<Person, ArrayList<String>> {
         return uniqueDB;
     }
 
-    public void addPerson(Person person, ArrayList<String> tickets){
-        if(!db.containsKey(person)) {
-            db.put(person, new ArrayList<>());
-            setChanged();
-            notifyObservers(person);
-        }
-    }
-
     public void removePerson(Person person){
         ArrayList<String> temp = new ArrayList<>(db.get(person));
         for (String e: temp) {

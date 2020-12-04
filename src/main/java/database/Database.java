@@ -15,7 +15,11 @@ public abstract class Database<T, S> extends Observable {
         return db.containsKey(name);
     }
 
-    public void addToDb(){
-
+    public void addToDb(T key, S Value){
+        if(!db.containsKey(key)){
+            this.db.put(key, Value);
+            setChanged();
+            notifyObservers(key);
+        }
     }
 }

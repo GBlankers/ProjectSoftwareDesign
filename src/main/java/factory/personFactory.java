@@ -15,7 +15,7 @@ public class personFactory implements personFactoryAbstract{
     @Override
     public Person addPerson(String name) {
         Person temp = new Person(name);
-        personDB.addPerson(temp, new ArrayList<>());
+        personDB.addToDb(temp, new ArrayList<>());
         return temp;
     }
 }
