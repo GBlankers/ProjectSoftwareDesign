@@ -35,6 +35,10 @@ public class PersonDB extends Database {
     }
 
     public void removePerson(Person person){
+        ArrayList<String> temp = new ArrayList<>(db.get(person));
+        for (String e: temp) {
+            TicketDB.getInstance().removeTicketOnly(e);
+        }
         db.remove(person);
     }
 
@@ -45,6 +49,12 @@ public class PersonDB extends Database {
         setChanged();
         notifyObservers(ticket);
         db.replace(person, temp);
+    }
+
+    public void removeTicket(Person payer, String ticketName){
+        ArrayList<String> temp = new ArrayList<>(db.get(payer));
+        temp.remove(ticketName);
+        db.replace(payer, temp);
     }
 
     public boolean personInDb(Person person){

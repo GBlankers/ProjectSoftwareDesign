@@ -1,3 +1,5 @@
+package priceCalculator;
+
 import database.PersonDB;
 import database.TicketDB;
 import person.Person;
@@ -92,13 +94,11 @@ public class PriceCalculator {
 
         num = totalTickets;
         System.out.println("Calculating prices [" + num + "/" + totalTickets +"]\r");
-
-        printMapping(pricesToPay);
-
     }
 
-    private void printMapping(HashMap<Person, HashMap<Person, Double>> priceMap){
+    public void printMapping(){
         HashMap<Person , Double> temp;
+        HashMap<Person, HashMap<Person, Double>> priceMap = new HashMap<>(this.pricesToPay);
         for(Person x: priceMap.keySet()){
             temp = priceMap.getOrDefault(x, null);
             if(!temp.isEmpty()){
