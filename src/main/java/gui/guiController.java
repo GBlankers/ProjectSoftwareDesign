@@ -8,8 +8,7 @@ import java.awt.*;
 
 public class guiController{
     //Main frame
-    private JFrame mainFrame;
-    //TODO Add ticket frame
+    private final JFrame mainFrame;
 
     public guiController(){
         mainFrame = new mainFrame("Money Tracker", PersonDB.getInstance());
@@ -17,6 +16,7 @@ public class guiController{
     }
 
     public void initialize(){
+        System.out.println("GUI STARTING");
         mainFrame.setVisible(true);
     }
 }

@@ -28,6 +28,7 @@ public class PriceCalculator {
 
 
     public void calculatePrices(){
+        pricesToPay.clear();
         // Name of all tickets
         ArrayList<String> allTickets = new ArrayList<>();
         // Person + list of all names of tickets they payed for
@@ -116,4 +117,7 @@ public class PriceCalculator {
         }
     }
 
+    public HashMap<Person, HashMap<Person, Double>> getPricesToPay() {
+        return pricesToPay;
+    }
 }

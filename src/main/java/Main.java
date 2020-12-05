@@ -7,6 +7,7 @@ import priceCalculator.PriceCalculator;
 import java.util.HashMap;
 
 // TODO abstract factory
+// TODO MVC pattern
 // TODO extra design pattern
 // TODO add comments
 // TODO add ticket window
@@ -29,7 +30,6 @@ public class Main {
 
     public void run(){
         personFactory factP = new personFactory();
-
         guiController guiController = new guiController();
 
         Person person1 = factP.addPerson("P1");
@@ -48,8 +48,10 @@ public class Main {
         factT.addTicket("restaurant", "rest1", person1, restBill);
         factT.addTicket("plane", "planeTicket1", person1, 400.0);
 
-        priceCalculator.calculatePrices();
-        priceCalculator.printMapping();
+        Person person5 = factP.addPerson("P5");
+
+//        priceCalculator.calculatePrices();
+//        priceCalculator.printMapping();
 
 //        sleep(5000);
 //

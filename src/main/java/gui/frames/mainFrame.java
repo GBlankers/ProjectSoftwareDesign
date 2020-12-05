@@ -8,6 +8,7 @@ import priceCalculator.PriceCalculator;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -17,6 +18,7 @@ public class mainFrame extends JFrame implements Observer {
 
     private JButton buttonPerson;
     private JButton buttonTicket;
+    private JButton deleteTicket;
     private JButton deletePerson;
     private JButton refreshButton;
 
@@ -29,6 +31,11 @@ public class mainFrame extends JFrame implements Observer {
     private DefaultListModel<String> ticketModel;
     private JScrollPane ticketScroll;
     private JLabel ticketLabel;
+
+    private JList<String> paymentList;
+    private DefaultListModel<String> paymentModel;
+    private JScrollPane paymentScroll;
+    private JLabel paymentLabel;
 
     private Observable observable;
 
@@ -44,6 +51,9 @@ public class mainFrame extends JFrame implements Observer {
 
         ticketModel = new DefaultListModel<>();
         ticketList = new JList<>(ticketModel);
+
+        paymentModel = new DefaultListModel<>();
+        paymentList = new JList<>(paymentModel);
 
         priceCalculator = new PriceCalculator();
 
@@ -64,26 +74,32 @@ public class mainFrame extends JFrame implements Observer {
         buttonPerson = new JButton("Add Person");
         buttonTicket = new JButton("Add Ticket");
         deletePerson = new JButton("Delete Person");
+        deleteTicket = new JButton("Delete Ticket");
         refreshButton = new JButton("Refresh");
 
         personLabel = new JLabel("All Persons");
         ticketLabel = new JLabel("All Tickets");
+        paymentLabel = new JLabel("Prices To Pay");
 
         // https://stackoverflow.com/questions/3200846/how-to-make-a-scrollable-jlist-to-add-details-got-from-a-joptionpane
         personScroll = new JScrollPane(personList);
         ticketScroll = new JScrollPane(ticketList);
+        paymentScroll = new JScrollPane(paymentList);
 
 
         this.addObjects(personLabel, container, layout, gbc, 0, 0, 1, 1, GridBagConstraints.CENTER);
         this.addObjects(ticketLabel, container, layout, gbc, 1, 0, 1, 1, GridBagConstraints.CENTER);
+        this.addObjects(paymentLabel, container, layout, gbc, 2, 0, 1, 1, GridBagConstraints.CENTER);
 
         this.addObjects(personScroll, container, layout, gbc, 0, 1, 1, 3, GridBagConstraints.BOTH);
         this.addObjects(ticketScroll, container, layout, gbc, 1, 1, 1, 3, GridBagConstraints.BOTH);
+        this.addObjects(paymentScroll, container, layout, gbc, 2, 1, 2, 3, GridBagConstraints.BOTH);
 
-        gbc.anchor = GridBagConstraints.SOUTH; // Buttons will stick to bottom of window
+        gbc.anchor = GridBagConstraints.SOUTH; // Buttons will stick to bottom of grid => bottom of window
+        this.addObjects(deletePerson, container, layout, gbc, 0, 4, 1, 1, GridBagConstraints.HORIZONTAL);
+        this.addObjects(deleteTicket, container, layout, gbc, 1, 4, 1, 1, GridBagConstraints.HORIZONTAL);
         this.addObjects(buttonPerson, container, layout, gbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
         this.addObjects(buttonTicket, container, layout, gbc, 3, 4, 1, 1, GridBagConstraints.HORIZONTAL);
-        this.addObjects(deletePerson, container, layout, gbc, 0, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 
         gbc.anchor = GridBagConstraints.NORTHEAST;
         this.addObjects(refreshButton, container, layout, gbc, 3, 0, 1, 1, GridBagConstraints.HORIZONTAL);
@@ -96,15 +112,41 @@ public class mainFrame extends JFrame implements Observer {
 
         deletePerson.addActionListener(e -> deletePerson());
 
+        deleteTicket.addActionListener(e -> deleteTicket());
+
         refreshButton.addActionListener(e -> refresh());
 
         this.setLocationRelativeTo(null);
     }
 
-    private void refresh(){
-        System.out.println();
+    private void refreshPricesToPay(){
+        paymentModel.clear();
         priceCalculator.calculatePrices();
-        priceCalculator.printMapping();
+        HashMap<Person, HashMap<Person, Double>> map = new HashMap<>(priceCalculator.getPricesToPay());
+        if(!ticketModel.isEmpty()) {
+            for (Person payer : map.keySet()) {
+                if (!map.getOrDefault(payer, null).isEmpty()) {
+                    for (Person x : map.get(payer).keySet()) {
+                        if(map.get(payer).getOrDefault(x, 0.0) != 0.0){
+                            String temp = x + " has to pay " + map.get(payer).get(x) + " to " + payer;
+                            paymentModel.addElement(temp);
+                        }
+                    }
+                }
+            }
+        } else {
+            paymentModel.addElement("No tickets");
+        }
+    }
+
+    private void deleteTicket() {
+        if(ticketList.getSelectedValue() == null){
+            System.out.println("Nothing selected");
+        } else {
+            TicketDB.getInstance().removeTicket(ticketList.getSelectedValue());
+            ticketModel.removeElement(ticketList.getSelectedValue());
+        }
+        refresh();
     }
 
     private void deletePerson() {
@@ -115,12 +157,18 @@ public class mainFrame extends JFrame implements Observer {
             PersonDB.getInstance().removePerson(personList.getSelectedValue());
             personModel.removeElement(personList.getSelectedValue());
             for(String x: tickets){
-                deleteTicket1(x);
+                deleteTicketOfPerson(x);
             }
         }
+        refresh();
     }
 
-    private void deleteTicket1(String name){
+    private void refresh(){
+        // TODO initial refresh problems
+        refreshPricesToPay();
+    }
+
+    private void deleteTicketOfPerson(String name){
         TicketDB.getInstance().removeTicketOnly(name);
         ticketModel.removeElement(name);
     }
@@ -137,6 +185,7 @@ public class mainFrame extends JFrame implements Observer {
         personFrame.setVisible(true);
     }
 
+    // Function to simplify the process of adding constrains to components
     public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc,
                            int gridx, int gridy, int gridwidth, int gridheight, int fill){
         // https://stackoverflow.com/questions/30656473/how-to-use-gridbaglayout
@@ -166,6 +215,7 @@ public class mainFrame extends JFrame implements Observer {
             } else if(arg instanceof String){
                 String s = (String) arg;
                 ticketModel.addElement(s);
+
             }
         }
     }
