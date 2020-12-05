@@ -4,6 +4,8 @@ import database.PersonDB;
 import database.TicketDB;
 import person.Person;
 import ticket.*;
+import ticket.evenTickets.evenTicket;
+import ticket.unevenTickets.unevenTicket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
