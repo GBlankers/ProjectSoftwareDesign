@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class addPersonFrame extends JFrame{
     private JPanel container;
@@ -53,7 +54,7 @@ public class addPersonFrame extends JFrame{
     private void switchToMainFrame(){
         String name = nameInput.getText();
         personFactory fact = new personFactory();
-        PersonDB.getInstance().addPerson(fact.addPerson(name));
+        fact.addPerson(name);
         this.setVisible(false);
         parent.setVisible(true);
     }

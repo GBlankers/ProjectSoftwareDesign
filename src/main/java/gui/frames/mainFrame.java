@@ -104,6 +104,7 @@ public class mainFrame extends JFrame implements Observer {
     private void refresh(){
         System.out.println();
         priceCalculator.calculatePrices();
+        priceCalculator.printMapping();
     }
 
     private void deletePerson() {
@@ -159,14 +160,13 @@ public class mainFrame extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof PersonDB){
-            if(arg instanceof Person){
+            if(arg instanceof Person) {
                 Person p = (Person) arg;
                 personModel.addElement(p);
             } else if(arg instanceof String){
                 String s = (String) arg;
                 ticketModel.addElement(s);
             }
-
         }
     }
 }

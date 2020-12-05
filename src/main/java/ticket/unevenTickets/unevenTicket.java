@@ -1,10 +1,13 @@
-package ticket;
+package ticket.unevenTickets;
 
 import person.Person;
+import ticket.Ticket;
+
 import java.util.HashMap;
 
-public class unevenTicket extends Ticket{
-    private HashMap<Person, Double> pricePerPerson;
+public abstract class unevenTicket extends Ticket {
+    // Map with the prices which each person needs to pay to the payer of this ticket
+    private final HashMap<Person, Double> pricePerPerson;
 
     public unevenTicket(Person payer, HashMap<Person, Double> pricePerPerson) {
         super(payer);

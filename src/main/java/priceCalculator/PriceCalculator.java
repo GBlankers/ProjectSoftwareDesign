@@ -4,6 +4,8 @@ import database.PersonDB;
 import database.TicketDB;
 import person.Person;
 import ticket.*;
+import ticket.evenTickets.evenTicket;
+import ticket.unevenTickets.unevenTicket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +60,7 @@ public class PriceCalculator {
 
             System.out.print("Calculating prices [" + num + "/" + totalTickets +"]\r");
 
-            Ticket tempTicket = ticketDB.getTicket(e);
+            Ticket tempTicket = ticketDB.getTickets(e);
             Person payer = tempTicket.getPayer();
             temp = new HashMap<>();
             num += 1;

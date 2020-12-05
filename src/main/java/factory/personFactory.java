@@ -3,6 +3,8 @@ package factory;
 import database.PersonDB;
 import person.Person;
 
+import java.util.ArrayList;
+
 public class personFactory implements personFactoryAbstract{
     private PersonDB personDB;
 
@@ -13,7 +15,7 @@ public class personFactory implements personFactoryAbstract{
     @Override
     public Person addPerson(String name) {
         Person temp = new Person(name);
-        personDB.addPerson(temp);
+        personDB.addToDb(temp, new ArrayList<>());
         return temp;
     }
 }
