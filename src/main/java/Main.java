@@ -6,18 +6,25 @@ import priceCalculator.PriceCalculator;
 
 import java.util.HashMap;
 
+// TODO abstract factory
+// TODO extra design pattern
+// TODO add comments
+// TODO add ticket window
+// TODO price mapping simplified
+// TODO price mapping show in main window
+// TODO Unit + integrate test
+// TODO modelio
 
 public class Main {
 
     public static void main(String[] args)
     {
         Main main = new Main();
-        main.run();
     }
 
     public Main()
     {
-
+        run();
     }
 
     public void run(){
