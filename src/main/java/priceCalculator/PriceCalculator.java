@@ -58,7 +58,7 @@ public class PriceCalculator {
 
             System.out.print("Calculating prices [" + num + "/" + totalTickets +"]\r");
 
-            Ticket tempTicket = ticketDB.getTicket(e);
+            Ticket tempTicket = ticketDB.getTickets(e);
             Person payer = tempTicket.getPayer();
             temp = new HashMap<>();
             num += 1;

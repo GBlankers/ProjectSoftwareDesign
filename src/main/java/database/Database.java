@@ -22,4 +22,12 @@ public abstract class Database<T, S> extends Observable {
             notifyObservers(key);
         }
     }
+
+    public S getTickets(T key){
+        return db.getOrDefault(key, null);
+    }
+
+    public HashMap<T, S> getHashMap(){
+        return db;
+    }
 }

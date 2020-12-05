@@ -2,7 +2,6 @@ package database;
 
 import person.Person;
 import ticket.Ticket;
-import java.util.HashMap;
 
 public class TicketDB extends Database<String, Ticket>{
 
@@ -20,7 +19,9 @@ public class TicketDB extends Database<String, Ticket>{
         return uniqueDB;
     }
 
-    //When remove ticket is called after a remove person
+     /*When remove ticket is called after a remove person
+     The tickets will already have been removed in the Person Arraylist
+     => only remove it in this db */
     public void removeTicketOnly(String ticketName){
         db.remove(ticketName);
     }
@@ -29,9 +30,5 @@ public class TicketDB extends Database<String, Ticket>{
     public void removeTicket(String ticketName){
         Person payer = db.get(ticketName).getPayer();
         PersonDB.getInstance().removeTicket(payer, ticketName);
-    }
-
-    public Ticket getTicket(String name){
-        return db.get(name);
     }
 }
