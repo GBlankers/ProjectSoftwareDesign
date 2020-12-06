@@ -97,6 +97,24 @@ public class PriceCalculator {
 
         num = totalTickets;
         System.out.println("Calculating prices [" + num + "/" + totalTickets +"]\r");
+        simplifyMapping();
+    }
+
+    private void simplifyMapping(){
+        for(Person x: this.pricesToPay.keySet()){
+            for(Person y: this.pricesToPay.get(x).keySet()){
+                if(this.pricesToPay.get(x).getOrDefault(y, 0.0) > this.pricesToPay.get(y).getOrDefault(x, 0.0)){
+                    this.pricesToPay.get(x).replace(y, this.pricesToPay.get(x).getOrDefault(y, 0.0) - this.pricesToPay.get(y).getOrDefault(x, 0.0));
+                    this.pricesToPay.get(y).replace(x, 0.0);
+                } else if(this.pricesToPay.get(x).getOrDefault(y, 0.0) < this.pricesToPay.get(y).getOrDefault(x, 0.0)){
+                    this.pricesToPay.get(y).replace(x, this.pricesToPay.get(y).getOrDefault(x, 0.0) - this.pricesToPay.get(x).getOrDefault(y, 0.0));
+                    this.pricesToPay.get(x).replace(y, 0.0);
+                } else {
+                    this.pricesToPay.get(x).replace(y, 0.0);
+                    this.pricesToPay.get(y).replace(x, 0.0);
+                }
+            }
+        }
     }
 
     public void printMapping(){

@@ -11,7 +11,6 @@ import java.util.HashMap;
 // TODO extra design pattern
 // TODO add comments
 // TODO add ticket window
-// TODO price mapping simplified
 // TODO price mapping show in main window
 // TODO Unit + integrate test
 // TODO modelio
@@ -46,7 +45,7 @@ public class Main {
         restBill.put(person3, 50.0);
         restBill.put(person4, 70.0);
         factT.addTicket("restaurant", "rest1", person1, restBill);
-        factT.addTicket("plane", "planeTicket1", person1, 400.0);
+        factT.addTicket("plane", "planeTicket1", person2, 400.0);
 
         Person person5 = factP.addPerson("P5");
 
