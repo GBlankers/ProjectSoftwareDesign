@@ -177,7 +177,6 @@ public class mainFrame extends JFrame implements Observer {
         addUnevenTicketFrame ticketFrame = new addUnevenTicketFrame("Add ticket", this, personModel, personList.getSelectedValue());
         this.setVisible(false);
         ticketFrame.setVisible(true);
-
     }
 
     private void switchToAddPerson(){
@@ -216,8 +215,8 @@ public class mainFrame extends JFrame implements Observer {
             } else if(arg instanceof String){
                 String s = (String) arg;
                 ticketModel.addElement(s);
-
             }
         }
+        refreshPricesToPay();
     }
 }

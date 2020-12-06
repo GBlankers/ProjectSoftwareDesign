@@ -102,16 +102,20 @@ public class addEvenTicketFrame extends JFrame{
     }
 
     private void switchToMainFrame(){
-        String ticketNameText = this.ticketName.getText();
-        String ticketTypeText = this.ticketType.getText();
-        int total_Price = Integer.parseInt(totalPrice.getText());
-        Person payer = (Person) this.payerComboBox.getSelectedItem();
-        ticketFactory fact = new ticketFactory();
+        try {
+            String ticketNameText = this.ticketName.getText();
+            String ticketTypeText = this.ticketType.getText();
+            int total_Price = Integer.parseInt(totalPrice.getText());
+            Person payer = (Person) this.payerComboBox.getSelectedItem();
+            ticketFactory fact = new ticketFactory();
 
-        try{
-            fact.addTicket(ticketTypeText, ticketNameText, payer, total_Price);
+            try {
+                fact.addTicket(ticketTypeText, ticketNameText, payer, total_Price);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Wrong ticket type\n Chose between: plane, ...");
+            }
         } catch (Exception e){
-            JOptionPane.showMessageDialog(this, "Wrong ticket type\n Chose between: plane, ...");
+            JOptionPane.showMessageDialog(this, "Something went wrong");
         }
 
         this.setVisible(false);

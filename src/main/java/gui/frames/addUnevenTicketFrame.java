@@ -8,6 +8,7 @@ import ticket.Ticket;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -28,6 +29,8 @@ public class addUnevenTicketFrame extends JFrame{
     private DefaultListModel<Person> personsModel;
 
     private Person selectedPerson;
+
+    private ArrayList<JTextField> textFields;
 
     private mainFrame parent;
 
@@ -76,9 +79,11 @@ public class addUnevenTicketFrame extends JFrame{
         this.addObjects(ticketType, container, layout, gbc, 0, 4, 4, 1);
 
         int i;
+        textFields = new ArrayList<>();
         for(i=0; i<persons.length; i++){
+            textFields.add(new JTextField(20));
             this.addObjects(new JLabel(persons[i].getName()), container, layout, gbc, 0, 5+i, 1, 1);
-            this.addObjects(new JTextField(20), container, layout, gbc, 1, 5+i, 3, 1);
+            this.addObjects(textFields.get(i), container, layout, gbc, 1, 5+i, 3, 1);
         }
 
         gbc.anchor = GridBagConstraints.NORTHEAST;
@@ -102,14 +107,25 @@ public class addUnevenTicketFrame extends JFrame{
     }
 
     private void switchToMainFrame(){
-        String ticketNameText = ticketName.getText();
-        String ticketTypeText = ticketType.getText();
-        ticketFactory fact = new ticketFactory();
+        try {
+            String ticketNameText = ticketName.getText();
+            String ticketTypeText = ticketType.getText();
+            Person payer = (Person) this.payerComboBox.getSelectedItem();
 
-        try{
-            fact.addTicket(ticketTypeText, ticketNameText,(Person) payerComboBox.getSelectedItem(), new HashMap<>());
-        } catch (Exception e){
-            JOptionPane.showMessageDialog(this, "Wrong ticket type\n Chose between: restaurant, ...");
+            ticketFactory fact = new ticketFactory();
+            HashMap<Person, Double> temp = new HashMap<>();
+
+            for (int i = 0; i < personsModel.size(); i++) {
+                temp.put(personsModel.get(i), Double.parseDouble(this.textFields.get(i).getText()));
+            }
+
+            try {
+                fact.addTicket(ticketTypeText, ticketNameText, payer, temp);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Wrong ticket type\n Chose between: restaurant, ...");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Something went wrong");
         }
 
         this.setVisible(false);
