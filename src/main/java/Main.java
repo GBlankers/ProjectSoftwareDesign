@@ -41,7 +41,7 @@ public class Main {
         ticketFactory factT = new ticketFactory();
 
         HashMap<Person, Double> restBill = new HashMap<>();
-        restBill.put(person2, 30.0);
+        restBill.put(person2, 80.0);
         restBill.put(person3, 50.0);
         restBill.put(person4, 70.0);
         factT.addTicket("restaurant", "rest1", person1, restBill);
@@ -49,15 +49,6 @@ public class Main {
 
         Person person5 = factP.addPerson("P5");
 
-//        priceCalculator.calculatePrices();
-//        priceCalculator.printMapping();
-
-//        sleep(5000);
-//
-//        Person person5 = factP.addToDb("P5");
-//
-//        System.out.println("\nNEW PERSON \n");
-//        priceCalculator.calculatePrices();
     }
 
 

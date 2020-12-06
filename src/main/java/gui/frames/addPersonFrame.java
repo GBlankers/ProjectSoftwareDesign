@@ -57,6 +57,7 @@ public class addPersonFrame extends JFrame{
         fact.addPerson(name);
         this.setVisible(false);
         parent.setVisible(true);
+        parent.refresh();
     }
 
     public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){

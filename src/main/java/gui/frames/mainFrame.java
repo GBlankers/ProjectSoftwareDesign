@@ -163,7 +163,7 @@ public class mainFrame extends JFrame implements Observer {
         refresh();
     }
 
-    private void refresh(){
+    public void refresh(){
         // TODO initial refresh problems
         refreshPricesToPay();
     }
@@ -174,9 +174,10 @@ public class mainFrame extends JFrame implements Observer {
     }
 
     private void switchToAddTicket(){
-        addTicketFrame ticketFrame = new addTicketFrame("Add ticket", this);
+        addUnevenTicketFrame ticketFrame = new addUnevenTicketFrame("Add ticket", this, personModel, personList.getSelectedValue());
         this.setVisible(false);
         ticketFrame.setVisible(true);
+
     }
 
     private void switchToAddPerson(){
