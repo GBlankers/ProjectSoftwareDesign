@@ -7,11 +7,7 @@ import priceCalculator.PriceCalculator;
 import java.util.HashMap;
 
 // TODO abstract factory
-// TODO MVC pattern
 // TODO extra design pattern
-// TODO add comments
-// TODO add ticket window
-// TODO price mapping show in main window
 // TODO Unit + integrate test
 // TODO modelio
 
@@ -41,7 +37,7 @@ public class Main {
         ticketFactory factT = new ticketFactory();
 
         HashMap<Person, Double> restBill = new HashMap<>();
-        restBill.put(person2, 80.0);
+        restBill.put(person2, 30.0);
         restBill.put(person3, 50.0);
         restBill.put(person4, 70.0);
         factT.addTicket("restaurant", "rest1", person1, restBill);

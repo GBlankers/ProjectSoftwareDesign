@@ -1,6 +1,5 @@
 package database;
 
-import person.Person;
 import ticket.Ticket;
 
 public class TicketDB extends Database<String, Ticket>{
@@ -28,7 +27,6 @@ public class TicketDB extends Database<String, Ticket>{
 
     //When a ticket is removed => Person arraylist has to be changed
     public void removeTicket(String ticketName){
-        Person payer = db.get(ticketName).getPayer();
-        PersonDB.getInstance().removeTicket(payer, ticketName);
+        PersonDB.getInstance().removeTicket(db.get(ticketName).getPayer(), ticketName);
     }
 }

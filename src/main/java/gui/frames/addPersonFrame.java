@@ -1,21 +1,22 @@
 package gui.frames;
 
-import database.PersonDB;
 import factory.personFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class addPersonFrame extends JFrame{
+    // Main content panel
     private JPanel container;
 
+    // Add person button
     private JButton okButton;
+
+    // Input field for the name
     private JTextField nameInput;
     private JLabel nameLabel;
 
+    // remember the parent to switch frames back
     private mainFrame parent;
 
     public addPersonFrame(String title, mainFrame parent){
@@ -24,6 +25,7 @@ public class addPersonFrame extends JFrame{
         initialize();
     }
 
+    // initialize variables + layout of the frame
     private void initialize(){
         this.setSize(500, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,6 +45,7 @@ public class addPersonFrame extends JFrame{
         this.addObjects(nameInput, container, layout, gbc, 0, 1, 1, 1);
         this.addObjects(okButton, container, layout, gbc, 0, 2, 1, 1);
 
+        // action listener to text input => function to enter key
         nameInput.addActionListener(e -> switchToMainFrame());
 
         okButton.addActionListener(e -> switchToMainFrame());
@@ -51,6 +54,7 @@ public class addPersonFrame extends JFrame{
         this.setLocationRelativeTo(null);
     }
 
+    // switch back to the main frame and add the person
     private void switchToMainFrame(){
         String name = nameInput.getText();
         personFactory fact = new personFactory();
@@ -60,6 +64,7 @@ public class addPersonFrame extends JFrame{
         parent.refresh();
     }
 
+    // Function to simplify the process of adding constrains to components
     public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
         // https://stackoverflow.com/questions/30656473/how-to-use-gridbaglayout
         gbc.gridx = gridx;

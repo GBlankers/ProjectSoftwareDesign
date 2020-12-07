@@ -1,7 +1,6 @@
 package ticket.evenTickets;
 
 import person.Person;
-import ticket.evenTickets.evenTicket;
 
 public class PlaneTicket extends evenTicket {
 

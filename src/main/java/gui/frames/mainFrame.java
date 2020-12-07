@@ -1,5 +1,6 @@
 package gui.frames;
 
+import database.Database;
 import database.PersonDB;
 import database.TicketDB;
 import person.Person;
@@ -14,24 +15,28 @@ import java.util.Observer;
 
 public class mainFrame extends JFrame implements Observer {
 
+    // Main Panel
     private JPanel container;
 
+    // Buttons
     private JButton buttonPerson;
     private JButton buttonTicket;
     private JButton deleteTicket;
     private JButton deletePerson;
-    private JButton refreshButton;
 
+    // List to show persons
     private JList<Person> personList;
     private DefaultListModel<Person> personModel;
     private JScrollPane personScroll;
     private JLabel personLabel;
 
+    // List to show tickets
     private JList<String> ticketList;
     private DefaultListModel<String> ticketModel;
     private JScrollPane ticketScroll;
     private JLabel ticketLabel;
 
+    // List to show prices to pay
     private JList<String> paymentList;
     private DefaultListModel<String> paymentModel;
     private JScrollPane paymentScroll;
@@ -46,6 +51,7 @@ public class mainFrame extends JFrame implements Observer {
 
         observable.addObserver(this);
 
+        // Initialize lists
         personModel = new DefaultListModel<>();
         personList = new JList<>(personModel);
 
@@ -60,6 +66,7 @@ public class mainFrame extends JFrame implements Observer {
         initialize();
     }
 
+    // Initialize the contents + layout of the main frame
     public void initialize(){
         this.setSize(600, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +82,6 @@ public class mainFrame extends JFrame implements Observer {
         buttonTicket = new JButton("Add Ticket");
         deletePerson = new JButton("Delete Person");
         deleteTicket = new JButton("Delete Ticket");
-        refreshButton = new JButton("Refresh");
 
         personLabel = new JLabel("All Persons");
         ticketLabel = new JLabel("All Tickets");
@@ -101,9 +107,6 @@ public class mainFrame extends JFrame implements Observer {
         this.addObjects(buttonPerson, container, layout, gbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
         this.addObjects(buttonTicket, container, layout, gbc, 3, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 
-        gbc.anchor = GridBagConstraints.NORTHEAST;
-        this.addObjects(refreshButton, container, layout, gbc, 3, 0, 1, 1, GridBagConstraints.HORIZONTAL);
-
         //https://stackoverflow.com/questions/21879243/how-to-create-on-click-event-for-buttons-in-swing
         //https://www.w3schools.com/java/java_lambda.asp#:~:text=Lambda%20Expressions%20were%20added%20in,the%20body%20of%20a%20method.
         buttonPerson.addActionListener(e -> switchToAddPerson());
@@ -114,16 +117,21 @@ public class mainFrame extends JFrame implements Observer {
 
         deleteTicket.addActionListener(e -> deleteTicket());
 
-        refreshButton.addActionListener(e -> refresh());
-
+        // Window will pop up in the middle of the screen
         this.setLocationRelativeTo(null);
     }
 
-    private void refreshPricesToPay(){
+    // Refresh the contents of the payment panel
+    public void refresh(){
+        // Delete the previous calculations already displayed
         paymentModel.clear();
+        // Re calculate the prices
         priceCalculator.calculatePrices();
+        // Get the price mapping
         HashMap<Person, HashMap<Person, Double>> map = new HashMap<>(priceCalculator.getPricesToPay());
+        // Check if there are tickets
         if(!ticketModel.isEmpty()) {
+            // Generate string: Person x had to pay ... to person Y. Put this in the payment panel
             for (Person payer : map.keySet()) {
                 if (!map.getOrDefault(payer, null).isEmpty()) {
                     for (Person x : map.get(payer).keySet()) {
@@ -139,46 +147,51 @@ public class mainFrame extends JFrame implements Observer {
         }
     }
 
+    // Delete a selected ticket
     private void deleteTicket() {
+        // Delete the selected item
         if(ticketList.getSelectedValue() == null){
             System.out.println("Nothing selected");
         } else {
+            // Remove the ticket from the database + from the panel
             TicketDB.getInstance().removeTicket(ticketList.getSelectedValue());
             ticketModel.removeElement(ticketList.getSelectedValue());
         }
+        // Redo the calculations
         refresh();
     }
 
+    // Delete a selected person
     private void deletePerson() {
+        // Delete selected person
         if(personList.getSelectedValue() == null){
             System.out.println("Nothing selected");
         } else {
-            ArrayList<String> tickets = PersonDB.getInstance().getHashMap().get(personList.getSelectedValue());
+            // Get all the tickets this person payed for
+            ArrayList<String> tickets = PersonDB.getInstance().getTickets(personList.getSelectedValue());
+            // Remove the person from the person db => the tickets will automatically be deleted from the ticket db
             PersonDB.getInstance().removePerson(personList.getSelectedValue());
+            // Remove the person from the person panel
             personModel.removeElement(personList.getSelectedValue());
+            // Remove all the tickets from the ticket panel
             for(String x: tickets){
-                deleteTicketOfPerson(x);
+                ticketModel.removeElement(x);
             }
         }
+        // Refresh price mapping calculation
         refresh();
     }
 
-    public void refresh(){
-        // TODO initial refresh problems
-        refreshPricesToPay();
-    }
-
-    private void deleteTicketOfPerson(String name){
-        TicketDB.getInstance().removeTicketOnly(name);
-        ticketModel.removeElement(name);
-    }
-
+    // Switch to the add tickets frames
     private void switchToAddTicket(){
+        // Switch frames to the unevenTicketFrame
         addUnevenTicketFrame ticketFrame = new addUnevenTicketFrame("Add ticket", this, personModel, personList.getSelectedValue());
+        // set this frame invisible and show the add ticket frame
         this.setVisible(false);
         ticketFrame.setVisible(true);
     }
 
+    // Switch to the add person frame
     private void switchToAddPerson(){
         addPersonFrame personFrame = new addPersonFrame("Add person", this);
         this.setVisible(false);
@@ -205,10 +218,10 @@ public class mainFrame extends JFrame implements Observer {
         container.add(component);
     }
 
-
+    // Observer pattern
     @Override
     public void update(Observable o, Object arg) {
-        if(o instanceof PersonDB){
+        if(o instanceof Database){
             if(arg instanceof Person) {
                 Person p = (Person) arg;
                 personModel.addElement(p);
@@ -216,7 +229,7 @@ public class mainFrame extends JFrame implements Observer {
                 String s = (String) arg;
                 ticketModel.addElement(s);
             }
+        refresh();
         }
-        refreshPricesToPay();
     }
 }

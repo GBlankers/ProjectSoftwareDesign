@@ -4,7 +4,6 @@ import database.PersonDB;
 import gui.frames.mainFrame;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class guiController{
     //Main frame

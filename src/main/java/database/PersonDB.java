@@ -19,6 +19,7 @@ public class PersonDB extends Database<Person, ArrayList<String>> {
         return uniqueDB;
     }
 
+    // Remove a person from the db + remove all its tickets from the ticket db
     public void removePerson(Person person){
         // If a person is removed, all the tickets of this person need to be removed as well
         ArrayList<String> temp = new ArrayList<>(db.get(person));
@@ -26,9 +27,11 @@ public class PersonDB extends Database<Person, ArrayList<String>> {
             TicketDB.getInstance().removeTicketOnly(e);
         }
 
+        // Remove from person db
         db.remove(person);
     }
 
+    // Add a ticket to a person in the db
     public void addTicket(Person person, String ticket){
         // Add the ticket to the existing Arraylist
         ArrayList<String> temp = new ArrayList<>(db.get(person));
@@ -38,6 +41,7 @@ public class PersonDB extends Database<Person, ArrayList<String>> {
         setChanged();
         notifyObservers(ticket);
 
+        // Replace the old ticket list with the new one
         db.replace(person, temp);
     }
 

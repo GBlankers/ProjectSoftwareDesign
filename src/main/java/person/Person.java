@@ -1,6 +1,7 @@
 package person;
 
 public class Person {
+    // Name of the person
     private final String name;
 
     public Person(String name) {
@@ -11,6 +12,7 @@ public class Person {
         return name;
     }
 
+    // To easily print a person
     @Override
     public String toString() {
         return name;

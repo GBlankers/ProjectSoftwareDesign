@@ -14,6 +14,7 @@ public class personFactory implements personFactoryAbstract{
 
     @Override
     public Person addPerson(String name) {
+        // Create a new person and add it to db with empty ticket list
         Person temp = new Person(name);
         personDB.addToDb(temp, new ArrayList<>());
         return temp;

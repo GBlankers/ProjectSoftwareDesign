@@ -17,29 +17,34 @@ public class PriceCalculator {
 
     private final PersonDB personDB;
     private final TicketDB ticketDB;
+
     // Name of person + dept to person in hashmap per person
     private HashMap<Person, HashMap<Person, Double>> pricesToPay;
 
+    // Constructor to initialize db and hashmap
     public PriceCalculator(){
         this.personDB = PersonDB.getInstance();
         this.ticketDB = TicketDB.getInstance();
-        pricesToPay = new HashMap<>();
+        this.pricesToPay = new HashMap<>();
     }
 
-
+    // Calculate the price mapping
     public void calculatePrices(){
+        // clear the previous mapping
         pricesToPay.clear();
         // Name of all tickets
         ArrayList<String> allTickets = new ArrayList<>();
         // Person + list of all names of tickets they payed for
         HashMap<Person, ArrayList<String>> everyone = new HashMap<>(this.personDB.getHashMap());
 
+        // For console logging
         int totalPeople = 0;
         int totalTickets = 0;
         int num = 0;
 
         System.out.print("Calculating prices [ / ]\r");
 
+        // Hashmap with prices to pay to 1 person, cleared with every new ticket
         HashMap<Person, Double> temp;
 
         // Initialize Hashmap
@@ -59,11 +64,17 @@ public class PriceCalculator {
         // Go over all tickets
         for(String e: allTickets){
 
+            // For console logging
             System.out.print("Calculating prices [" + num + "/" + totalTickets +"]\r");
 
+            // Get the ticket
             Ticket tempTicket = ticketDB.getTickets(e);
+            // Get the person who payed
             Person payer = tempTicket.getPayer();
+            // New temp hashmap
             temp = new HashMap<>();
+
+            // For console logging
             num += 1;
 
             if (tempTicket instanceof unevenTicket){
@@ -79,6 +90,7 @@ public class PriceCalculator {
                         temp.put(x, old + newPrice);
                     }
                 }
+                // Replace the old mapping with the new one
                 pricesToPay.replace(payer, temp);
 
             } else if (tempTicket instanceof evenTicket){
@@ -87,19 +99,21 @@ public class PriceCalculator {
                // Add the totalPrice/#persons to every person
                 double ppp = price/totalPeople;
 
+                // Add this price the every person
                 for(Person x: pricesToPay.keySet()){
                     if(x != payer)
                         temp.put(x, pricesToPay.get(payer).getOrDefault(x, 0.0) + ppp);
                }
+                // Replace the old mapping with the new one
                 pricesToPay.replace(payer, temp);
             }
         }
 
-        num = totalTickets;
         System.out.println("Calculating prices [" + num + "/" + totalTickets +"]\r");
         simplifyMapping();
     }
 
+    // Simplify the price map: If A has to pay to B and B has to pay to A => mapping can be simplified
     private void simplifyMapping(){
         for(Person x: this.pricesToPay.keySet()){
             for(Person y: this.pricesToPay.get(x).keySet()){
@@ -117,6 +131,7 @@ public class PriceCalculator {
         }
     }
 
+    // Print the mapping to the console
     public void printMapping(){
         HashMap<Person , Double> temp;
         HashMap<Person, HashMap<Person, Double>> priceMap = new HashMap<>(this.pricesToPay);
@@ -129,12 +144,14 @@ public class PriceCalculator {
         }
     }
 
+    // Extra method for print mapping
     private void printHashMap(HashMap<Person, Double> hm){
         for(Person x: hm.keySet()){
             System.out.println(x + " " + hm.getOrDefault(x, 0.0));
         }
     }
 
+    // Get the total mapping of all debts
     public HashMap<Person, HashMap<Person, Double>> getPricesToPay() {
         return pricesToPay;
     }
