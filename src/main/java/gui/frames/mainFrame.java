@@ -3,6 +3,7 @@ package gui.frames;
 import database.Database;
 import database.PersonDB;
 import database.TicketDB;
+import gui.mvController;
 import person.Person;
 import priceCalculator.PriceCalculator;
 
@@ -95,7 +96,7 @@ public class mainFrame extends JFrame implements Observer {
 
         this.addObjects(personLabel, container, layout, gbc, 0, 0, 1, 1, GridBagConstraints.CENTER);
         this.addObjects(ticketLabel, container, layout, gbc, 1, 0, 1, 1, GridBagConstraints.CENTER);
-        this.addObjects(paymentLabel, container, layout, gbc, 2, 0, 1, 1, GridBagConstraints.CENTER);
+        this.addObjects(paymentLabel, container, layout, gbc, 2, 0, 2, 1, GridBagConstraints.CENTER);
 
         this.addObjects(personScroll, container, layout, gbc, 0, 1, 1, 3, GridBagConstraints.BOTH);
         this.addObjects(ticketScroll, container, layout, gbc, 1, 1, 1, 3, GridBagConstraints.BOTH);
