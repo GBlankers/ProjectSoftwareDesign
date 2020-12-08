@@ -114,7 +114,7 @@ public class PriceCalculator {
     }
 
     // Simplify the price map: If A has to pay to B and B has to pay to A => mapping can be simplified
-    private void simplifyMapping(){
+    public void simplifyMapping(){
         for(Person x: this.pricesToPay.keySet()){
             for(Person y: this.pricesToPay.get(x).keySet()){
                 if(this.pricesToPay.get(x).getOrDefault(y, 0.0) > this.pricesToPay.get(y).getOrDefault(x, 0.0)){

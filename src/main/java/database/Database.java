@@ -37,4 +37,9 @@ public abstract class Database<T, S> extends Observable {
     public HashMap<T, S> getHashMap(){
         return db;
     }
+
+    // Reset the db
+    public void clear(){
+        db.clear();
+    }
 }

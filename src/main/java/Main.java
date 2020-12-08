@@ -24,15 +24,14 @@ public class Main {
     }
 
     public void run(){
+        new guiController();
+
         personFactory factP = new personFactory();
-        guiController guiController = new guiController();
 
         Person person1 = factP.addPerson("P1");
         Person person2 = factP.addPerson("P2");
         Person person3 = factP.addPerson("P3");
         Person person4 = factP.addPerson("P4");
-
-        PriceCalculator priceCalculator = new PriceCalculator();
 
         ticketFactory factT = new ticketFactory();
 
