@@ -2,7 +2,6 @@ package database;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.text.html.HTMLDocument;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observable;
@@ -40,11 +39,6 @@ public abstract class Database<T, S> extends Observable implements Iterable<T>{
     // Reset the db
     public void clear(){
         db.clear();
-    }
-
-    // return the whole hashmap => price calculation
-    public HashMap<T, S> getHashMap(){
-        return db;
     }
 
     @Override

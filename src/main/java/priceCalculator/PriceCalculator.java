@@ -34,12 +34,9 @@ public class PriceCalculator {
         pricesToPay.clear();
         // Name of all tickets
         ArrayList<String> allTickets = new ArrayList<>();
-        // Person + list of all names of tickets they payed for
-        HashMap<Person, ArrayList<String>> everyone = new HashMap<>(this.personDB.getHashMap());
 
         // For console logging
         int totalPeople = 0;
-        int totalTickets = 0;
         int num = 0;
 
         System.out.print("Calculating prices [ / ]\r");
@@ -47,19 +44,14 @@ public class PriceCalculator {
         // Hashmap with prices to pay to 1 person, cleared with every new ticket
         HashMap<Person, Double> temp;
 
-        // Initialize Hashmap
-        for(Person x: everyone.keySet()) {
+        // Initialize Hashmap + list with al the tickets
+        for(Person x: personDB) {
             pricesToPay.put(x, new HashMap<>());
             totalPeople += 1;
+            allTickets.addAll(personDB.getTickets(x));
         }
 
-        // Get a list with all the names of the tickets
-        for(ArrayList<String> x: everyone.values()){
-            for(String s: x){
-                allTickets.add(s);
-                totalTickets += 1;
-            }
-        }
+        int totalTickets = allTickets.size();
 
         // Go over all tickets
         for(String e: allTickets){
@@ -83,7 +75,7 @@ public class PriceCalculator {
                 // get the existing debts for the payer
                 HashMap<Person, Double> oldPrices = new HashMap<>(pricesToPay.get(payer));
                 // for every person update the debts they have
-                for(Person x: everyone.keySet()){
+                for(Person x: personDB){
                     if(x != payer) {
                         double old = oldPrices.getOrDefault(x, 0.0);
                         double newPrice = pricePerPerson.getOrDefault(x, 0.0);
