@@ -1,10 +1,14 @@
 package database;
 
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.text.html.HTMLDocument;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Observable;
 
 // Generic types T and S to work with both databases => write common methods only once here
-public abstract class Database<T, S> extends Observable {
+public abstract class Database<T, S> extends Observable implements Iterable<T>{
 
     // Hashmap is available for all classes in this package
     protected final HashMap<T, S> db;
@@ -33,13 +37,31 @@ public abstract class Database<T, S> extends Observable {
         return db.getOrDefault(key, null);
     }
 
+    // Reset the db
+    public void clear(){
+        db.clear();
+    }
+
     // return the whole hashmap => price calculation
     public HashMap<T, S> getHashMap(){
         return db;
     }
 
-    // Reset the db
-    public void clear(){
-        db.clear();
+    @Override
+    public @NotNull Iterator<T> iterator(){
+        return new Iterator<T>() {
+
+            final Iterator<T> hmIterator = db.keySet().iterator();
+
+            @Override
+            public boolean hasNext() {
+                return hmIterator.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return hmIterator.next();
+            }
+        };
     }
 }
