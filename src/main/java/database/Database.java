@@ -18,8 +18,8 @@ public abstract class Database<T, S> extends Observable implements Iterable<T>{
     }
 
     // Check if key in hashmap
-    public boolean inDb(T name){
-        return db.containsKey(name);
+    public boolean inDb(T key){
+        return db.containsKey(key);
     }
 
     // Add pair to db

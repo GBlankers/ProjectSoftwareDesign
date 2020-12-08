@@ -19,18 +19,32 @@ import java.util.HashMap;
 @PrepareForTest(PersonDB.class)
 public class PersonDB_UTest {
 
-    public PersonDB_UTest(){
-
-    }
+    public PersonDB_UTest(){}
 
     @Before
     public void initialize(){
 
     }
 
-
     @Test
-    public void t_inDb() {
+    public void t_inDb() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Database.class.getDeclaredField("db");
+        field.setAccessible(true);
+
+        PersonDB personDB_underTest = PersonDB.getInstance();
+
+        Person testPerson = new Person("testPerson");
+        ArrayList<String> testList = new ArrayList<>();
+        Person test2Person = new Person("testPerson2");
+
+        HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
+            put(testPerson, testList);
+        }};
+
+        field.set(personDB_underTest, hm);
+
+        Assert.assertTrue("Test for in_db method - Must be True", personDB_underTest.inDb(testPerson));
+        Assert.assertFalse("Test for in_db method - Must be false", personDB_underTest.inDb(test2Person));
     }
 
     @Test
@@ -66,15 +80,29 @@ public class PersonDB_UTest {
         mock_db.put(mockPerson, mockList);
 
         ArrayList<String> returnedList = personDB_underTest.getTickets(mockPerson);
-        Assert.assertEquals("Testing getEntry - should return mockObject", mockList, returnedList);
+        Assert.assertEquals("Testing getEntry - should return mockObject", returnedList, mockList);
     }
 
     @Test
-    public void t_getHashMap() {
-    }
+    @SuppressWarnings("unchecked")
+    public void t_clear() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Database.class.getDeclaredField("db");
+        field.setAccessible(true);
 
-    @Test
-    public void t_clear() {
+        PersonDB personDB_underTest = PersonDB.getInstance();
+
+        Person testPerson = new Person("testPerson");
+        ArrayList<String> testList = new ArrayList<>();
+
+        HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
+            put(testPerson, testList);
+        }};
+
+        field.set(personDB_underTest, hm);
+
+        Assert.assertFalse("Check if db is cleared - Must be false", ((HashMap<Person, ArrayList<String>>) field.get(personDB_underTest)).isEmpty());
+        personDB_underTest.clear();
+        Assert.assertTrue("Check if db is cleared - Must be true", ((HashMap<Person, ArrayList<String>>) field.get(personDB_underTest)).isEmpty());
     }
 
     @Test
@@ -86,14 +114,83 @@ public class PersonDB_UTest {
     }
 
     @Test
-    public void t_removePerson() {
+    public void t_removePerson() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Database.class.getDeclaredField("db");
+        field.setAccessible(true);
+
+        PersonDB personDB_underTest = PersonDB.getInstance();
+
+        Person testPerson = new Person("testPerson");
+        ArrayList<String> testList = new ArrayList<>();
+        Person test2Person = new Person("testPerson2");
+        ArrayList<String> test2List = new ArrayList<>();
+
+        HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
+            put(testPerson, testList);
+            put(test2Person, test2List);
+        }};
+
+        field.set(personDB_underTest, hm);
+
+        Assert.assertTrue("Test for remove_person method - Must be True", personDB_underTest.inDb(testPerson));
+        personDB_underTest.removePerson(testPerson);
+        Assert.assertFalse("Test for remove_person method - Must be False", personDB_underTest.inDb(testPerson));
+        Assert.assertTrue("Test for remove_person method - Must be True", personDB_underTest.inDb(test2Person));
     }
 
     @Test
-    public void t_addTicket() {
+    public void t_addTicket() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Database.class.getDeclaredField("db");
+        field.setAccessible(true);
+
+        PersonDB personDB_underTest = PersonDB.getInstance();
+
+        Person testPerson = new Person("testPerson");
+        ArrayList<String> testList = new ArrayList<String>(){{
+            add("Ticket1");
+            add("Ticket2");
+        }};
+
+        ArrayList<String> expected = new ArrayList<String>(testList){{
+            add("Ticket3");
+        }};
+
+        HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
+            put(testPerson, testList);
+        }};
+
+        field.set(personDB_underTest, hm);
+
+        personDB_underTest.addTicket(testPerson, "Ticket3");
+
+        Assert.assertEquals("Check add_ticket method", expected, personDB_underTest.getTickets(testPerson));
     }
 
     @Test
-    public void t_removeTicket() {
+    public void t_removeTicket() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Database.class.getDeclaredField("db");
+        field.setAccessible(true);
+
+        PersonDB personDB_underTest = PersonDB.getInstance();
+
+        Person testPerson = new Person("testPerson");
+        ArrayList<String> testList = new ArrayList<String>(){{
+            add("Ticket1");
+            add("Ticket2");
+        }};
+
+        ArrayList<String> expected = new ArrayList<String>(){{
+            add("Ticket1");
+        }};
+
+        HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
+            put(testPerson, testList);
+        }};
+
+        field.set(personDB_underTest, hm);
+
+        personDB_underTest.removeTicket(testPerson, "Ticket2");
+
+        Assert.assertEquals("Check add_ticket method", expected, personDB_underTest.getTickets(testPerson));
     }
 }

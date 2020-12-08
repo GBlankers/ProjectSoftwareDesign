@@ -2,7 +2,6 @@ import factory.personFactory;
 import factory.ticketFactory;
 import gui.guiController;
 import person.Person;
-import priceCalculator.PriceCalculator;
 
 import java.util.HashMap;
 
@@ -14,7 +13,7 @@ public class Main {
 
     public static void main(String[] args)
     {
-        Main main = new Main();
+        new Main();
     }
 
     public Main()
@@ -41,7 +40,9 @@ public class Main {
         factT.addTicket("restaurant", "rest1", person1, restBill);
         factT.addTicket("plane", "planeTicket1", person2, 400.0);
 
-        Person person5 = factP.addPerson("P5");
+        factP.addPerson("P5");
+
+        sleep(1);
 
     }
 
