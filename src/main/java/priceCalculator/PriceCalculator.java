@@ -19,7 +19,7 @@ public class PriceCalculator {
     private final TicketDB ticketDB;
 
     // Name of person + dept to person in hashmap per person
-    private HashMap<Person, HashMap<Person, Double>> pricesToPay;
+    private final HashMap<Person, HashMap<Person, Double>> pricesToPay;
 
     // Constructor to initialize db and hashmap
     public PriceCalculator(){

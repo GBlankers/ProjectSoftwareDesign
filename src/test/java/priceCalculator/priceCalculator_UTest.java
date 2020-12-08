@@ -5,17 +5,12 @@ import database.TicketDB;
 import factory.personFactory;
 import factory.ticketFactory;
 import org.junit.Assert;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import person.Person;
-import priceCalculator.PriceCalculator;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -34,8 +29,7 @@ public class priceCalculator_UTest {
     private Person person3;
     private Person person4;
 
-    public priceCalculator_UTest()
-    {
+    public priceCalculator_UTest(){
 
     }
 
