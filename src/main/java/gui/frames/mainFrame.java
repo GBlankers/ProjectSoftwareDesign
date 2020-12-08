@@ -27,13 +27,13 @@ public class mainFrame extends JFrame implements Observer {
 
     // List to show persons
     private JList<Person> personList;
-    private DefaultListModel<Person> personModel;
+    public DefaultListModel<Person> personModel;
     private JScrollPane personScroll;
     private JLabel personLabel;
 
     // List to show tickets
     private JList<String> ticketList;
-    private DefaultListModel<String> ticketModel;
+    public DefaultListModel<String> ticketModel;
     private JScrollPane ticketScroll;
     private JLabel ticketLabel;
 
@@ -47,10 +47,14 @@ public class mainFrame extends JFrame implements Observer {
 
     private PriceCalculator priceCalculator;
 
+    protected mvController controller;
+
     public mainFrame(String title, Observable observable){
         super(title);
 
         observable.addObserver(this);
+
+        controller = new mvController(this);
 
         // Initialize lists
         personModel = new DefaultListModel<>();
@@ -114,9 +118,9 @@ public class mainFrame extends JFrame implements Observer {
 
         buttonTicket.addActionListener(e -> switchToAddTicket());
 
-        deletePerson.addActionListener(e -> deletePerson());
+        deletePerson.addActionListener(e -> controller.deletePerson(personList.getSelectedValue()));
 
-        deleteTicket.addActionListener(e -> deleteTicket());
+        deleteTicket.addActionListener(e -> controller.deleteTicket(ticketList.getSelectedValue()));
 
         // Window will pop up in the middle of the screen
         this.setLocationRelativeTo(null);
@@ -148,45 +152,10 @@ public class mainFrame extends JFrame implements Observer {
         }
     }
 
-    // Delete a selected ticket
-    private void deleteTicket() {
-        // Delete the selected item
-        if(ticketList.getSelectedValue() == null){
-            System.out.println("Nothing selected");
-        } else {
-            // Remove the ticket from the database + from the panel
-            TicketDB.getInstance().removeTicket(ticketList.getSelectedValue());
-            ticketModel.removeElement(ticketList.getSelectedValue());
-        }
-        // Redo the calculations
-        refresh();
-    }
-
-    // Delete a selected person
-    private void deletePerson() {
-        // Delete selected person
-        if(personList.getSelectedValue() == null){
-            System.out.println("Nothing selected");
-        } else {
-            // Get all the tickets this person payed for
-            ArrayList<String> tickets = PersonDB.getInstance().getTickets(personList.getSelectedValue());
-            // Remove the person from the person db => the tickets will automatically be deleted from the ticket db
-            PersonDB.getInstance().removePerson(personList.getSelectedValue());
-            // Remove the person from the person panel
-            personModel.removeElement(personList.getSelectedValue());
-            // Remove all the tickets from the ticket panel
-            for(String x: tickets){
-                ticketModel.removeElement(x);
-            }
-        }
-        // Refresh price mapping calculation
-        refresh();
-    }
-
     // Switch to the add tickets frames
     private void switchToAddTicket(){
         // Switch frames to the unevenTicketFrame
-        addUnevenTicketFrame ticketFrame = new addUnevenTicketFrame("Add ticket", this, personModel, personList.getSelectedValue());
+        addUnevenTicketFrame ticketFrame = new addUnevenTicketFrame("Add ticket", controller, personModel, personList.getSelectedValue());
         // set this frame invisible and show the add ticket frame
         this.setVisible(false);
         ticketFrame.setVisible(true);
@@ -194,7 +163,7 @@ public class mainFrame extends JFrame implements Observer {
 
     // Switch to the add person frame
     private void switchToAddPerson(){
-        addPersonFrame personFrame = new addPersonFrame("Add person", this);
+        addPersonFrame personFrame = new addPersonFrame("Add person", controller);
         this.setVisible(false);
         personFrame.setVisible(true);
     }

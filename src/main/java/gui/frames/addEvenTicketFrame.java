@@ -1,51 +1,38 @@
 package gui.frames;
 
-import factory.ticketFactory;
+import gui.mvController;
 import person.Person;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class addEvenTicketFrame extends JFrame{
-    // Main content panel
-    private JPanel container;
 
-    // Add ticket button
-    private JButton okButton;
+    public JTextField ticketName;
 
-    // Name input
-    private JLabel nameLabel;
-    private JTextField ticketName;
+    public JTextField ticketType;
 
-    // Ticket type input
-    private JLabel typeLabel;
-    private JTextField ticketType;
-
-    // Price input
-    private JLabel priceLabel;
-    private JTextField totalPrice;
+    public JTextField totalPrice;
 
     // Dropdown menu to chose un/even ticket and payer
-    private JComboBox<Person> payerComboBox;
+    public JComboBox<Person> payerComboBox;
     private JComboBox<String> un_evenCombobox;
 
     // Extra variables for the dropdown menu
     private final String[] T = {"even ticket", "uneven ticket"};
-    private Person[] persons;
-    private DefaultListModel<Person> personsModel;
+    private final Person[] persons;
+    private final DefaultListModel<Person> personsModel;
 
     // Person which is selected in the main frame
-    private Person selectedPerson;
+    private final Person selectedPerson;
 
-    private mainFrame parent;
+    private final mvController controller;
 
-
-
-    public addEvenTicketFrame(String title, mainFrame parent, DefaultListModel<Person> persons, Person selectedPerson){
+    public addEvenTicketFrame(String title, mvController controller, DefaultListModel<Person> persons, Person selectedPerson){
         super(title);
 
         // Initialize variables
-        this.parent = parent;
+        this.controller = controller;
         this.personsModel = persons;
         this.selectedPerson = selectedPerson;
 
@@ -62,20 +49,25 @@ public class addEvenTicketFrame extends JFrame{
         this.setSize(500, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        container = new JPanel();
+        // Main content panel
+        JPanel container = new JPanel();
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
 
         container.setLayout(layout);
         getContentPane().add(container);
 
-        nameLabel = new JLabel("Name of the ticket:");
+        // Name input
+        JLabel nameLabel = new JLabel("Name of the ticket:");
         this.ticketName = new JTextField(30);
-        typeLabel = new JLabel("Type of the ticket:");
+        // Ticket type input
+        JLabel typeLabel = new JLabel("Type of the ticket:");
         this.ticketType = new JTextField(30);
-        priceLabel = new JLabel("Total Price: ");
+        // Price input
+        JLabel priceLabel = new JLabel("Total Price: ");
         this.totalPrice = new JTextField(20);
-        okButton = new JButton("Add");
+        // Add ticket button
+        JButton okButton = new JButton("Add");
 
 
         un_evenCombobox = new JComboBox<>(T);
@@ -96,11 +88,11 @@ public class addEvenTicketFrame extends JFrame{
         gbc.anchor = GridBagConstraints.NORTHEAST;
         this.addObjects(okButton, container, layout, gbc, 3, 6, 1, 1);
 
-        okButton.addActionListener(e -> switchToMainFrame());
+        okButton.addActionListener(e -> controller.addTicket(this));
 
         un_evenCombobox.addActionListener(e -> changeTicketType());
 
-        totalPrice.addActionListener(e -> switchToMainFrame());
+        totalPrice.addActionListener(e -> controller.addTicket(this));
 
         this.setLocationRelativeTo(null);
     }
@@ -111,51 +103,23 @@ public class addEvenTicketFrame extends JFrame{
         // Check empty string
         if(type != null){
             if(type.equals("uneven ticket")){
-                addUnevenTicketFrame unevenTicketFrame = new addUnevenTicketFrame("Add Ticket", this.parent, personsModel, (Person) this.payerComboBox.getSelectedItem());
+                addUnevenTicketFrame unevenTicketFrame = new addUnevenTicketFrame("Add Ticket",
+                        controller, personsModel, (Person) this.payerComboBox.getSelectedItem());
                 this.setVisible(false);
                 unevenTicketFrame.setVisible(true);
             }
         }
     }
 
-    // Switch back to the main frame and add the even ticket
-    private void switchToMainFrame(){
-        // If text fields are empty => exception => try catch
-        try {
-            String ticketNameText = this.ticketName.getText();
-            String ticketTypeText = this.ticketType.getText();
-            int total_Price = Integer.parseInt(totalPrice.getText());
-            Person payer = (Person) this.payerComboBox.getSelectedItem();
-            ticketFactory fact = new ticketFactory();
-
-            // Try to add the ticket, wrong type => exception => try catch
-            try {
-                fact.addTicket(ticketTypeText, ticketNameText, payer, total_Price);
-            } catch (Exception e) {
-                // Error window
-                JOptionPane.showMessageDialog(this, "Wrong ticket type\n Chose between: plane, ...");
-            }
-        } catch (Exception e){
-            // Error window
-            JOptionPane.showMessageDialog(this, "Something went wrong");
-        }
-
-        // Change visibility
-        this.setVisible(false);
-        parent.setVisible(true);
-
-        // Refresh the price mapping
-        parent.refresh();
-    }
-
     // Function to simplify the process of adding constrains to components
-    public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
+    public void addObjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc,
+                           int gridX, int gridY, int gridWidth, int gridHeight){
         // https://stackoverflow.com/questions/30656473/how-to-use-gridbaglayout
-        gbc.gridx = gridx;
-        gbc.gridy = gridy;
+        gbc.gridx = gridX;
+        gbc.gridy = gridY;
 
-        gbc.gridwidth = gridwidth;
-        gbc.gridheight = gridheight;
+        gbc.gridwidth = gridWidth;
+        gbc.gridheight = gridHeight;
 
         layout.setConstraints(component, gbc);
         container.add(component);

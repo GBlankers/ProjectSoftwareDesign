@@ -1,27 +1,22 @@
 package gui.frames;
 
 import factory.personFactory;
+import gui.mvController;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class addPersonFrame extends JFrame{
-    // Main content panel
-    private JPanel container;
-
-    // Add person button
-    private JButton okButton;
 
     // Input field for the name
-    private JTextField nameInput;
-    private JLabel nameLabel;
+    public JTextField nameInput;
 
-    // remember the parent to switch frames back
-    private mainFrame parent;
+    // The controller which controls the button actions
+    private final mvController controller;
 
-    public addPersonFrame(String title, mainFrame parent){
+    public addPersonFrame(String title, mvController controller){
         super(title);
-        this.parent = parent;
+        this.controller = controller;
         initialize();
     }
 
@@ -30,15 +25,17 @@ public class addPersonFrame extends JFrame{
         this.setSize(500, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        container = new JPanel();
+        // Main content panel
+        JPanel container = new JPanel();
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
 
         container.setLayout(layout);
         getContentPane().add(container);
 
-        nameLabel = new JLabel("Name:");
-        okButton = new JButton("Add");
+        JLabel nameLabel = new JLabel("Name:");
+        // Add person button
+        JButton okButton = new JButton("Add");
         nameInput = new JTextField(40);
 
         this.addObjects(nameLabel, container, layout, gbc, 0, 0, 1, 1);
@@ -46,22 +43,12 @@ public class addPersonFrame extends JFrame{
         this.addObjects(okButton, container, layout, gbc, 0, 2, 1, 1);
 
         // action listener to text input => function to enter key
-        nameInput.addActionListener(e -> switchToMainFrame());
+        nameInput.addActionListener(e -> controller.addPerson(this));
 
-        okButton.addActionListener(e -> switchToMainFrame());
+        okButton.addActionListener(e -> controller.addPerson(this));
 
         // Center the window on screen
         this.setLocationRelativeTo(null);
-    }
-
-    // switch back to the main frame and add the person
-    private void switchToMainFrame(){
-        String name = nameInput.getText();
-        personFactory fact = new personFactory();
-        fact.addPerson(name);
-        this.setVisible(false);
-        parent.setVisible(true);
-        parent.refresh();
     }
 
     // Function to simplify the process of adding constrains to components

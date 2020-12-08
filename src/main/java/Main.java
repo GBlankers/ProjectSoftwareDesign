@@ -6,7 +6,7 @@ import priceCalculator.PriceCalculator;
 
 import java.util.HashMap;
 
-// TODO abstract factory / MVC
+// TODO abstract factory
 // TODO extra design pattern
 // TODO Unit + integrate test
 // TODO modelio
