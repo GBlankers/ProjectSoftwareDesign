@@ -6,7 +6,7 @@ import person.Person;
 import java.util.HashMap;
 
 // TODO abstract factory
-// TODO Unit + integrate test
+// TODO integrate test
 // TODO modelio
 
 public class Main {

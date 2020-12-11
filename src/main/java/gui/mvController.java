@@ -65,11 +65,26 @@ public class mvController{
     // switch back to the main frame and add the person
     public void addPerson(addPersonFrame addPersonFrame){
         String name = addPersonFrame.nameInput.getText();
-        personFactory fact = new personFactory();
-        fact.addPerson(name);
-        addPersonFrame.setVisible(false);
-        parent.setVisible(true);
-        parent.refresh();
+
+        // Check for duplicate names
+        boolean duplicateName = false;
+        for(int i = 0; i<parent.personModel.size(); i++){
+            if(parent.personModel.get(i).getName().equals(name)){
+                duplicateName = true;
+            }
+        }
+
+        // Only add to db if unique name else error message
+        if(!duplicateName) {
+            personFactory fact = new personFactory();
+            fact.addPerson(name);
+            addPersonFrame.setVisible(false);
+            parent.setVisible(true);
+            parent.refresh();
+        } else {
+            JOptionPane.showMessageDialog(addPersonFrame, "There is already a person with this name");
+        }
+
     }
 
     // Switch back to the main frame and add the even ticket
@@ -82,13 +97,25 @@ public class mvController{
             Person payer = (Person) evenTicketFrame.payerComboBox.getSelectedItem();
             ticketFactory fact = new ticketFactory();
 
-            // Try to add the ticket, wrong type => exception => try catch
-            try {
-                fact.addTicket(ticketTypeText, ticketNameText, payer, total_Price);
-            } catch (Exception e) {
-                // Error window
-                JOptionPane.showMessageDialog(evenTicketFrame, "Wrong ticket type\n Chose between: plane, ...");
+            boolean duplicateName = false;
+            for(int i = 0; i<parent.ticketModel.size(); i++){
+                if(parent.ticketModel.get(i).equals(ticketNameText)){
+                    duplicateName = true;
+                }
             }
+
+            if(!duplicateName){
+                // Try to add the ticket, wrong type => exception => try catch
+                try {
+                    fact.addTicket(ticketTypeText, ticketNameText, payer, total_Price);
+                } catch (Exception e) {
+                    // Error window
+                    JOptionPane.showMessageDialog(evenTicketFrame, "Wrong ticket type\n Chose between: plane, ...");
+                }
+            } else {
+                JOptionPane.showMessageDialog(evenTicketFrame, "There is already a ticket with this name");
+            }
+
         } catch (Exception e){
             // Error window
             JOptionPane.showMessageDialog(evenTicketFrame, "Something went wrong");
@@ -120,13 +147,26 @@ public class mvController{
                 temp.put(unevenTicketFrame.personsModel.get(i), Double.parseDouble(unevenTicketFrame.textFields.get(i).getText()));
             }
 
-            // Try to add the ticket, wrong type => exception => try catch
-            try {
-                fact.addTicket(ticketTypeText, ticketNameText, payer, temp);
-            } catch (Exception e) {
-                // error window
-                JOptionPane.showMessageDialog(unevenTicketFrame, "Wrong ticket type\n Chose between: restaurant, ...");
+            boolean duplicateName = false;
+            for(int i = 0; i<parent.ticketModel.size(); i++){
+                if(parent.ticketModel.get(i).equals(ticketNameText)){
+                    duplicateName = true;
+                }
             }
+
+            if(!duplicateName){
+                // Try to add the ticket, wrong type => exception => try catch
+                try {
+                    fact.addTicket(ticketTypeText, ticketNameText, payer, temp);
+
+                } catch (Exception e) {
+                    // error window
+                    JOptionPane.showMessageDialog(unevenTicketFrame, "Wrong ticket type\n Chose between: restaurant, ...");
+                }
+            } else {
+                JOptionPane.showMessageDialog(unevenTicketFrame, "There is already a ticket with this name");
+            }
+
         } catch (Exception e) {
             // error window
             JOptionPane.showMessageDialog(unevenTicketFrame, "Something went wrong");
