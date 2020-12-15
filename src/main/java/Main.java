@@ -6,7 +6,7 @@ import person.Person;
 import java.util.HashMap;
 
 // TODO abstract factory
-// TODO integrate test
+// TODO extra ticket types + GUI warning change
 // TODO modelio
 
 public class Main {

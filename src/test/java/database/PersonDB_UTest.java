@@ -27,15 +27,16 @@ public class PersonDB_UTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void t_inDb() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);
 
         PersonDB personDB_underTest = PersonDB.getInstance();
 
-        Person testPerson = new Person("testPerson");
-        ArrayList<String> testList = new ArrayList<>();
-        Person test2Person = new Person("testPerson2");
+        Person testPerson = Mockito.mock(Person.class);
+        ArrayList<String> testList = Mockito.mock(ArrayList.class);
+        Person test2Person = Mockito.mock(Person.class);
 
         HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
             put(testPerson, testList);
@@ -91,8 +92,8 @@ public class PersonDB_UTest {
 
         PersonDB personDB_underTest = PersonDB.getInstance();
 
-        Person testPerson = new Person("testPerson");
-        ArrayList<String> testList = new ArrayList<>();
+        Person testPerson = Mockito.mock(Person.class);
+        ArrayList<String> testList = Mockito.mock(ArrayList.class);
 
         HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
             put(testPerson, testList);
@@ -114,16 +115,18 @@ public class PersonDB_UTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void t_removePerson() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);
 
         PersonDB personDB_underTest = PersonDB.getInstance();
 
-        Person testPerson = new Person("testPerson");
+        Person testPerson = Mockito.mock(Person.class);
+        // Can't be a mocked object => in remove person the arraylist will be iterated
         ArrayList<String> testList = new ArrayList<>();
-        Person test2Person = new Person("testPerson2");
-        ArrayList<String> test2List = new ArrayList<>();
+        Person test2Person = Mockito.mock(Person.class);
+        ArrayList<String> test2List = Mockito.mock(ArrayList.class);
 
         HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{
             put(testPerson, testList);
@@ -145,12 +148,13 @@ public class PersonDB_UTest {
 
         PersonDB personDB_underTest = PersonDB.getInstance();
 
-        Person testPerson = new Person("testPerson");
+        Person testPerson = Mockito.mock(Person.class);
         ArrayList<String> testList = new ArrayList<String>(){{
             add("Ticket1");
             add("Ticket2");
         }};
 
+        // = testList + ticket3
         ArrayList<String> expected = new ArrayList<String>(testList){{
             add("Ticket3");
         }};
@@ -173,14 +177,14 @@ public class PersonDB_UTest {
 
         PersonDB personDB_underTest = PersonDB.getInstance();
 
-        Person testPerson = new Person("testPerson");
+        Person testPerson = Mockito.mock(Person.class);
         ArrayList<String> testList = new ArrayList<String>(){{
             add("Ticket1");
             add("Ticket2");
         }};
 
-        ArrayList<String> expected = new ArrayList<String>(){{
-            add("Ticket1");
+        ArrayList<String> expected = new ArrayList<String>(testList){{
+            remove("Ticket2");
         }};
 
         HashMap<Person, ArrayList<String>> hm = new HashMap<Person, ArrayList<String>>() {{

@@ -48,9 +48,7 @@ public class PersonDB extends Database<Person, ArrayList<String>> {
     // Remove a ticket from a persons list
     public void removeTicket(Person payer, String ticketName){
         // remove ticket from list in personDb
-        ArrayList<String> temp = new ArrayList<>(db.get(payer));
-        temp.remove(ticketName);
-        db.replace(payer, temp);
+        db.get(payer).remove(ticketName);
 
         // Remove ticket from Ticket db
         TicketDB.getInstance().removeTicketOnly(ticketName);

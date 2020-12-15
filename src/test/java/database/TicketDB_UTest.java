@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -28,14 +29,14 @@ public class TicketDB_UTest {
     public void initialize(){}
 
     @Test
-    public void inDb() throws NoSuchFieldException, IllegalAccessException {
+    public void t_inDb() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);
 
         TicketDB ticketDB_underTest = TicketDB.getInstance();
 
         String testName = "testTicket";
-        Ticket testTicket = new PlaneTicket(new Person("testPerson"), 400);
+        Ticket testTicket = Mockito.mock(Ticket.class);
         String test2Name = "test2Ticket";
 
         HashMap<String, Ticket> hm = new HashMap<String, Ticket>() {{
@@ -46,12 +47,11 @@ public class TicketDB_UTest {
 
         Assert.assertTrue("Test for in_db method - Must be True", ticketDB_underTest.inDb(testName));
         Assert.assertFalse("Test for in_db method - Must be false", ticketDB_underTest.inDb(test2Name));
-
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void addToDb() throws NoSuchFieldException, IllegalAccessException {
+    public void t_addToDb() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);
 
@@ -68,7 +68,7 @@ public class TicketDB_UTest {
     }
 
     @Test
-    public void getTickets() throws NoSuchFieldException, IllegalAccessException {
+    public void t_getTickets() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);
 
@@ -80,20 +80,19 @@ public class TicketDB_UTest {
         Ticket mockTicket = Mockito.mock(Ticket.class);
         mock_db.put(mockString, mockTicket);
 
-        Ticket returnedTicket = ticketDB_underTest.getTickets(mockString);
-        Assert.assertEquals("Testing getEntry - should return mockObject", mockTicket, returnedTicket);
+        Assert.assertEquals("Testing getEntry - should return mockObject", mockTicket, ticketDB_underTest.getTickets(mockString));
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void clear() throws NoSuchFieldException, IllegalAccessException {
+    public void t_clear() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);
 
         TicketDB ticketDB_underTest = TicketDB.getInstance();
 
         String testName = "testName";
-        Ticket testTicket = new PlaneTicket(new Person("testPerson"), 400);
+        Ticket testTicket = Mockito.mock(Ticket.class);
 
         HashMap<String, Ticket> hm = new HashMap<String, Ticket>() {{
             put(testName, testTicket);
@@ -107,7 +106,7 @@ public class TicketDB_UTest {
     }
 
     @Test
-    public void getInstance() {
+    public void t_getInstance() {
         TicketDB db1 = TicketDB.getInstance();
         TicketDB db2 = TicketDB.getInstance();
 
@@ -115,15 +114,15 @@ public class TicketDB_UTest {
     }
 
     @Test
-    public void removeTicketOnly() throws NoSuchFieldException, IllegalAccessException {
+    public void t_removeTicketOnly() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);
 
         TicketDB ticketDB_underTest = TicketDB.getInstance();
         String testName = "testName";
-        Ticket testTicket = new PlaneTicket(new Person("testPerson"), 400);
+        Ticket testTicket = Mockito.mock(Ticket.class);
         String test2Name = "test2Name";
-        Ticket test2Ticket = new PlaneTicket(new Person("test2Person"), 700);
+        Ticket test2Ticket = Mockito.mock(Ticket.class);
 
 
         HashMap<String, Ticket> hm = new HashMap<String, Ticket>() {{
@@ -139,42 +138,4 @@ public class TicketDB_UTest {
         Assert.assertTrue("Test for remove_ticket_only method - Must be True", ticketDB_underTest.inDb(test2Name));
     }
 
-    @Test
-    public void removeTicket() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Database.class.getDeclaredField("db");
-        field.setAccessible(true);
-
-        TicketDB ticketDB_underTest = TicketDB.getInstance();
-        PersonDB personDB_underTest = PersonDB.getInstance();
-
-        personFactory factory = new personFactory();
-
-        Person testPerson = factory.addPerson("testPerson");
-        factory.addPerson("test2Person");
-
-        String testName = "testName";
-        Ticket testTicket = new PlaneTicket(testPerson, 400);
-        String test2Name = "test2Name";
-        Ticket test2Ticket = new PlaneTicket(testPerson, 700);
-
-        personDB_underTest.addTicket(testPerson, testName);
-        personDB_underTest.addTicket(testPerson, test2Name);
-
-        HashMap<String, Ticket> hm = new HashMap<String, Ticket>() {{
-            put(testName, testTicket);
-            put(test2Name, test2Ticket);
-        }};
-
-        ArrayList<String> expected = new ArrayList<String>(){{
-            add(test2Name);
-        }};
-
-        field.set(ticketDB_underTest, hm);
-
-        Assert.assertTrue("Test for remove_ticket method - Must be True", ticketDB_underTest.inDb(testName));
-        ticketDB_underTest.removeTicket(testName);
-        Assert.assertFalse("Test for remove_ticket method - Must be False", ticketDB_underTest.inDb(testName));
-        Assert.assertEquals("Test for remove_ticket method", expected, personDB_underTest.getTickets(testPerson));
-        Assert.assertTrue("Test for remove_ticket method - Must be True", ticketDB_underTest.inDb(test2Name));
-    }
 }
