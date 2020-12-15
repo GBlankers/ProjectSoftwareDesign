@@ -110,7 +110,7 @@ public class mvController{
                     fact.addTicket(ticketTypeText, ticketNameText, payer, total_Price);
                 } catch (Exception e) {
                     // Error window
-                    JOptionPane.showMessageDialog(evenTicketFrame, "Wrong ticket type\n Chose between: plane, ...");
+                    JOptionPane.showMessageDialog(evenTicketFrame, "Wrong ticket type\n Chose between: plane or concert");
                 }
             } else {
                 JOptionPane.showMessageDialog(evenTicketFrame, "There is already a ticket with this name");
@@ -161,7 +161,7 @@ public class mvController{
 
                 } catch (Exception e) {
                     // error window
-                    JOptionPane.showMessageDialog(unevenTicketFrame, "Wrong ticket type\n Chose between: restaurant, ...");
+                    JOptionPane.showMessageDialog(unevenTicketFrame, "Wrong ticket type\n Chose between: restaurant or bar");
                 }
             } else {
                 JOptionPane.showMessageDialog(unevenTicketFrame, "There is already a ticket with this name");

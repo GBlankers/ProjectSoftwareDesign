@@ -3,7 +3,9 @@ package factory;
 import database.PersonDB;
 import database.TicketDB;
 import person.Person;
+import ticket.evenTickets.ConcertTicket;
 import ticket.evenTickets.PlaneTicket;
+import ticket.unevenTickets.BarTicket;
 import ticket.unevenTickets.RestaurantTicket;
 import ticket.evenTickets.evenTicket;
 import ticket.unevenTickets.unevenTicket;
@@ -23,17 +25,29 @@ public class ticketFactory implements ticketFactoryAbstract{
 
     // If the tickets is an even ticket
     @Override
-    public void addTicket(String type, String ticketName, Person payer, double totalPrice) throws RuntimeException{
+    public void addTicket(String type, String ticketName, Person payer, double totalPrice) throws RuntimeException {
         // Check for existing type of ticket
-        if(type.equals("plane")){
+        if (type.equals("plane")) {
             // If the payer does not exist => add it to db
-            if(!personDB.inDb(payer)){personDB.addToDb(payer, new ArrayList<>());}
+            if (!personDB.inDb(payer)) {
+                personDB.addToDb(payer, new ArrayList<>());
+            }
 
             // make a new ticket + add to dbs
             evenTicket temp = new PlaneTicket(payer, totalPrice);
             personDB.addTicket(payer, ticketName);
             ticketDB.addToDb(ticketName, temp);
-        } else {
+        } else if (type.equals("concert")){
+            // If the payer does not exist => add it to db
+            if (!personDB.inDb(payer)) {
+                personDB.addToDb(payer, new ArrayList<>());
+            }
+
+            // make a new ticket + add to dbs
+            evenTicket temp = new ConcertTicket(payer, totalPrice);
+            personDB.addTicket(payer, ticketName);
+            ticketDB.addToDb(ticketName, temp);
+        }else {
             throw new RuntimeException("Unknown ticket type " + type);
         }
     }
@@ -48,6 +62,14 @@ public class ticketFactory implements ticketFactoryAbstract{
 
             // make a new ticket + add to dbs
             unevenTicket temp = new RestaurantTicket(payer, pricePerPerson);
+            personDB.addTicket(payer, ticketName);
+            ticketDB.addToDb(ticketName, temp);
+        } else if (type.equals("bar")){
+            // If the payer does not exist => add it to db
+            if(!personDB.inDb(payer)){personDB.addToDb(payer, new ArrayList<>());}
+
+            // make a new ticket + add to dbs
+            unevenTicket temp = new BarTicket(payer, pricePerPerson);
             personDB.addTicket(payer, ticketName);
             ticketDB.addToDb(ticketName, temp);
         } else {
