@@ -1,6 +1,5 @@
 package database;
 
-import factory.personFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,12 +8,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import person.Person;
 import ticket.Ticket;
-import ticket.evenTickets.PlaneTicket;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 // Run with PowerMock, an extended version of Mockito
@@ -81,6 +77,28 @@ public class TicketDB_UTest {
         mock_db.put(mockString, mockTicket);
 
         Assert.assertEquals("Testing getEntry - should return mockObject", mockTicket, ticketDB_underTest.getTickets(mockString));
+    }
+
+    @Test
+    public void t_size() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Database.class.getDeclaredField("db");
+        field.setAccessible(true);
+
+        TicketDB ticketDB_underTest = TicketDB.getInstance();
+        ticketDB_underTest.clear();
+
+        Assert.assertEquals("Testing size- Must be 0", 0, ticketDB_underTest.size());
+
+        String testName = "test1";
+        Ticket testTicket = Mockito.mock(Ticket.class);
+
+        HashMap<String, Ticket> hm = new HashMap<String, Ticket>() {{
+            put(testName, testTicket);
+        }};
+
+        field.set(ticketDB_underTest, hm);
+
+        Assert.assertEquals("Testing size- Must be 1", 1, ticketDB_underTest.size());
     }
 
     @Test

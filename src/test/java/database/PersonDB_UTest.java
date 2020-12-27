@@ -86,6 +86,32 @@ public class PersonDB_UTest {
 
     @Test
     @SuppressWarnings("unchecked")
+    public void t_size() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Database.class.getDeclaredField("db");
+        field.setAccessible(true);
+
+        PersonDB personDB_underTest = PersonDB.getInstance();
+        HashMap<Person, ArrayList<String>> mock_db = new HashMap<>();
+        field.set(personDB_underTest, mock_db);
+
+        Assert.assertEquals("Testing size - should return 0", 0, personDB_underTest.size());
+
+        Person mockPerson = Mockito.mock(Person.class);
+        ArrayList<String> mockList = Mockito.mock(ArrayList.class);
+        mock_db.put(mockPerson, mockList);
+
+        Assert.assertEquals("Testing size - should return 1", 1, personDB_underTest.size());
+
+        mockPerson = Mockito.mock(Person.class);
+        mockList = Mockito.mock(ArrayList.class);
+        mock_db.put(mockPerson, mockList);
+
+        Assert.assertEquals("Testing size - should return 1", 2, personDB_underTest.size());
+
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     public void t_clear() throws NoSuchFieldException, IllegalAccessException {
         Field field = Database.class.getDeclaredField("db");
         field.setAccessible(true);

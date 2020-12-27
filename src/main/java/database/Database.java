@@ -41,6 +41,11 @@ public abstract class Database<T, S> extends Observable implements Iterable<T>{
         db.clear();
     }
 
+    // Get size
+    public int size(){
+        return db.size();
+    }
+
     @Override
     public @NotNull Iterator<T> iterator(){
         return new Iterator<T>() {

@@ -7,7 +7,6 @@ import ticket.*;
 import ticket.evenTickets.evenTicket;
 import ticket.unevenTickets.unevenTicket;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PriceCalculator {
@@ -21,7 +20,7 @@ public class PriceCalculator {
     // Name of person + dept to person in hashmap per person
     private final HashMap<Person, HashMap<Person, Double>> pricesToPay;
 
-    // Constructor to initialize db and hashmap
+    // Constructor to initialize db's and hashmap
     public PriceCalculator(){
         this.personDB = PersonDB.getInstance();
         this.ticketDB = TicketDB.getInstance();
@@ -32,29 +31,25 @@ public class PriceCalculator {
     public void calculatePrices(){
         // clear the previous mapping
         pricesToPay.clear();
-        // Name of all tickets
-        ArrayList<String> allTickets = new ArrayList<>();
 
         // For console logging
-        int totalPeople = 0;
+        int totalPeople = personDB.size();
+        int totalTickets = ticketDB.size();
         int num = 0;
 
         System.out.print("Calculating prices [ / ]\r");
 
-        // Hashmap with prices to pay to 1 person, cleared with every new ticket
+        // Hashmap with prices to pay to 1 person, new with every new ticket
+        // => problems with references
         HashMap<Person, Double> temp;
 
         // Initialize Hashmap + list with al the tickets
         for(Person x: personDB) {
             pricesToPay.put(x, new HashMap<>());
-            totalPeople += 1;
-            allTickets.addAll(personDB.getTickets(x));
         }
 
-        int totalTickets = allTickets.size();
-
         // Go over all tickets
-        for(String e: allTickets){
+        for(String e: ticketDB){
 
             // For console logging
             System.out.print("Calculating prices [" + num + "/" + totalTickets +"]\r");
