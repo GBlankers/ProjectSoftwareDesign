@@ -21,17 +21,13 @@ import java.util.HashMap;
 @PrepareForTest(PriceCalculator.class)
 public class priceCalculator_UTest {
 
-    private final PersonDB personDB = PersonDB.getInstance();
-    private final TicketDB ticketDB = TicketDB.getInstance();
-
     public priceCalculator_UTest(){
 
     }
 
     @Before
     public void initialize(){
-        personDB.clear();
-        ticketDB.clear();
+
     }
 
     @Test

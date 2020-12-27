@@ -150,6 +150,7 @@ public class mainFrame extends JFrame implements Observer {
         } else {
             paymentModel.addElement("No tickets");
         }
+        System.out.println("GUI updated");
     }
 
     // Switch to the add tickets frames
