@@ -24,6 +24,7 @@ public class mainFrame extends JFrame implements Observer {
     private JButton buttonTicket;
     private JButton deleteTicket;
     private JButton deletePerson;
+    private JButton refreshButton;
 
     // List to show persons
     private JList<Person> personList;
@@ -87,6 +88,7 @@ public class mainFrame extends JFrame implements Observer {
         buttonTicket = new JButton("Add Ticket");
         deletePerson = new JButton("Delete Person");
         deleteTicket = new JButton("Delete Ticket");
+        refreshButton = new JButton("Refresh");
 
         personLabel = new JLabel("All Persons");
         ticketLabel = new JLabel("All Tickets");
@@ -99,8 +101,9 @@ public class mainFrame extends JFrame implements Observer {
 
 
         this.addObjects(personLabel, container, layout, gbc, 0, 0, 1, 1, GridBagConstraints.CENTER);
+        this.addObjects(refreshButton, container, layout, gbc, 3, 0, 1, 1, GridBagConstraints.HORIZONTAL);
         this.addObjects(ticketLabel, container, layout, gbc, 1, 0, 1, 1, GridBagConstraints.CENTER);
-        this.addObjects(paymentLabel, container, layout, gbc, 2, 0, 2, 1, GridBagConstraints.CENTER);
+        this.addObjects(paymentLabel, container, layout, gbc, 2, 0, 1, 1, GridBagConstraints.CENTER);
 
         this.addObjects(personScroll, container, layout, gbc, 0, 1, 1, 3, GridBagConstraints.BOTH);
         this.addObjects(ticketScroll, container, layout, gbc, 1, 1, 1, 3, GridBagConstraints.BOTH);
@@ -117,6 +120,8 @@ public class mainFrame extends JFrame implements Observer {
         buttonPerson.addActionListener(e -> switchToAddPerson());
 
         buttonTicket.addActionListener(e -> switchToAddTicket());
+
+        refreshButton.addActionListener(e -> refresh());
 
         deletePerson.addActionListener(e -> controller.deletePerson(personList.getSelectedValue()));
 
