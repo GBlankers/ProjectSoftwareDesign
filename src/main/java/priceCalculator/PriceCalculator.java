@@ -48,7 +48,7 @@ public class PriceCalculator {
             pricesToPay.put(x, new HashMap<>());
         }
 
-        // Go over all tickets
+        // Go over all tickets => iterator
         for(String e: ticketDB){
 
             // For console logging

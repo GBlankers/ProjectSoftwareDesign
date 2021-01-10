@@ -36,8 +36,8 @@ public class Main {
         restBill.put(person2, 30.0);
         restBill.put(person3, 50.0);
         restBill.put(person4, 70.0);
-        factT.addTicket("restaurant", "rest1", person1, restBill);
-        factT.addTicket("plane", "planeTicket1", person2, 400.0);
+        factT.addTicket("restaurant", "TestRestaurant", person1, restBill);
+        factT.addTicket("plane", "TestPlane", person2, 400.0);
 
         factP.addPerson("P5");
 
