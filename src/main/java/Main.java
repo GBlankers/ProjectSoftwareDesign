@@ -5,9 +5,6 @@ import person.Person;
 
 import java.util.HashMap;
 
-// TODO abstract factory
-// TODO modelio
-
 public class Main {
 
     public static void main(String[] args)
